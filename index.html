@@ -1,0 +1,2410 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Holiday Tarot 2026</title>
+
+  <!-- html2canvas for download -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <style>
+  :root{
+    --bg1:#fdeef2;
+    --bg2:#f7fbff;
+    --ink:#1a1d2b;
+    --muted:rgba(26,29,43,.65);
+
+    --card:#ffffffcc;
+    --stroke:rgba(26,29,43,.10);
+    --shadow: 0 18px 55px rgba(0,0,0,.10);
+
+    --accent1:#fb7185;
+    --accent2:#60a5fa;
+    --accent3:#34d399;
+
+    /* share tree theming vars */
+    --treeA:#34d399;
+    --treeB:#10b981;
+    --treeGlow: rgba(16,185,129,.22);
+    --treeStar: rgba(255,214,140,.95);
+    --treeStarGlow: rgba(255,214,140,.55);
+
+    /* flip card dynamic height (JS will override per-card) */
+    --flipH: 520px;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "PingFang SC","Microsoft YaHei", sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 20% 0%, var(--bg1), transparent 60%),
+      radial-gradient(1200px 600px at 80% 10%, var(--bg2), transparent 60%),
+      linear-gradient(180deg, #fff, #fff);
+    min-height:100vh;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:26px 18px 40px;
+  }
+
+  header{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  h1{
+    margin:6px 0 8px;
+    font-size:42px;
+    letter-spacing:.2px;
+  }
+  .subtitle{
+    margin:0 auto;
+    max-width:860px;
+    line-height:1.55;
+    color:var(--muted);
+    font-size:15px;
+  }
+
+  .topbar{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:12px;
+    align-items:center;
+  }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.75);
+    border:1px solid var(--stroke);
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+    font-weight:700;
+    font-size:13px;
+  }
+  .langToggle{
+    display:flex;
+    gap:8px;
+  }
+  .langToggle button{
+    border:1px solid var(--stroke);
+    background:rgba(255,255,255,.70);
+    padding:8px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:800;
+    color:rgba(26,29,43,.80);
+  }
+  .langToggle button.active{
+    background:rgba(26,29,43,.92);
+    color:#fff;
+    border-color:rgba(26,29,43,.12);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 380px 1fr;
+    gap:18px;
+    align-items:start;
+    margin-top:18px;
+  }
+  @media (max-width: 980px){
+    .grid{ grid-template-columns:1fr; }
+  }
+
+  .panel{
+    background:rgba(255,255,255,.70);
+    border:1px solid var(--stroke);
+    border-radius:22px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .panel .inner{
+    padding:18px 18px 16px;
+  }
+  .panel h2{
+    font-size:18px;
+    margin:0 0 8px;
+    letter-spacing:.2px;
+  }
+  .hint{
+    margin:0 0 14px;
+    font-size:12.5px;
+    color:rgba(26,29,43,.62);
+    line-height:1.45;
+  }
+
+  .row2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .row1{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  label{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    color:rgba(26,29,43,.72);
+    margin-bottom:6px;
+  }
+  input, select, textarea{
+    width:100%;
+    padding:12px 12px;
+    border-radius:14px;
+    border:1px solid rgba(26,29,43,.14);
+    background:rgba(255,255,255,.85);
+    outline:none;
+    font-size:14px;
+    color:rgba(26,29,43,.92);
+  }
+  input:disabled{
+    opacity:.75;
+    background:rgba(245,245,245,.9);
+    cursor:not-allowed;
+  }
+
+  .btnRow{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:12px;
+  }
+  .btn{
+    border:1px solid var(--stroke);
+    padding:11px 12px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:900;
+    background:rgba(255,255,255,.78);
+    box-shadow:0 10px 24px rgba(0,0,0,.06);
+    transition: transform .08s ease;
+    user-select:none;
+  }
+  .btn:active{ transform: translateY(1px); }
+  .btn.primary{
+    background: linear-gradient(135deg, rgba(251,113,133,.28), rgba(96,165,250,.20));
+    border-color:rgba(26,29,43,.10);
+  }
+  .btn.secondary{
+    background: linear-gradient(135deg, rgba(52,211,153,.22), rgba(255,226,185,.30));
+    border-color:rgba(26,29,43,.10);
+  }
+  .btn.ghost{
+    background:rgba(255,255,255,.70);
+  }
+
+  .privacy{
+    font-size:12px;
+    color:rgba(26,29,43,.62);
+    margin-top:10px;
+    line-height:1.45;
+  }
+
+  /* celestial sigil in left panel */
+.treeBox{
+  display:flex;
+  justify-content:center;
+  padding:10px 0 14px;
+}
+
+.miniSigilWrap{
+  width:160px;
+  height:210px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  text-align:center;
+}
+
+.miniSigil{
+  width:150px;
+  height:150px;
+  border-radius:999px;
+  position:relative;
+  border:1px solid rgba(26,29,43,.10);
+  background:
+    radial-gradient(85px 70px at 35% 25%, rgba(255,255,255,.95), transparent 60%),
+    radial-gradient(120px 110px at 70% 35%, rgba(251,113,133,.20), transparent 70%),
+    radial-gradient(140px 130px at 35% 75%, rgba(52,211,153,.18), transparent 72%),
+    radial-gradient(140px 130px at 75% 80%, rgba(96,165,250,.18), transparent 72%),
+    linear-gradient(135deg, rgba(255,255,255,.72), rgba(255,255,255,.42));
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.55);
+}
+
+.miniSigilDash{
+  position:absolute;
+  inset:12px;
+  border-radius:999px;
+  border:1px dashed rgba(26,29,43,.18);
+  opacity:.65;
+}
+
+.miniSigilStar{
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:14px;
+  color:rgba(26,29,43,.45);
+  opacity:.85;
+}
+
+.miniSigilLabel{
+  width:100%;             
+  justify-content:center;     
+  text-align:center;           
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.22em;
+  color:rgba(26,29,43,.55);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  user-select:none;
+}
+
+.miniSigilSpark{
+  display:inline-flex;     
+  width:14px;                 
+  justify-content:center;     
+  font-size:12px;
+  color:rgba(26,29,43,.50);
+}
+
+  /* right content */
+  .rightTop{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:14px;
+    padding:18px 18px 0;
+  }
+  .rightTop h2{ margin:0; }
+  .rightTop .subhint{
+    font-size:12.5px;
+    color:rgba(26,29,43,.62);
+    margin-top:4px;
+  }
+
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:12px 18px 10px;
+  }
+  .chip{
+    font-size:12px;
+    font-weight:800;
+    color:rgba(26,29,43,.75);
+    padding:7px 10px;
+    border-radius:999px;
+    border:1px solid rgba(26,29,43,.12);
+    background:rgba(255,255,255,.70);
+  }
+
+  /* cards spread */
+  .cards{
+    display:grid;
+    grid-template-columns: repeat(3, minmax(210px, 1fr));
+    gap:12px;
+    padding:8px 14px 14px;
+    overflow:visible;
+    padding-bottom: 26px;
+  }
+  @media (max-width: 980px){
+    .cards{ grid-template-columns:1fr; }
+  }
+
+  .spreadTag{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+    font-size:12.5px;
+    color:rgba(26,29,43,.62);
+    padding:0 18px 10px;
+  }
+  .spreadTag .tagPill{
+    border:1px solid rgba(26,29,43,.12);
+    background:rgba(255,255,255,.70);
+    border-radius:999px;
+    padding:6px 10px;
+    font-weight:900;
+  }
+
+  /* ===== Flip card (dynamic height via --flipH) ===== */
+  .flip{
+    perspective: 1200px;
+    min-height: var(--flipH);
+  }
+  .flipInner{
+    position:relative;
+    width:100%;
+    height: var(--flipH);
+    transform-style:preserve-3d;
+    transition: transform .9s cubic-bezier(.2,.7,.1,1);
+  }
+  .flip.revealed .flipInner{ transform: rotateY(180deg); }
+
+  .face{
+    position:absolute;
+    inset:0;
+    border-radius:22px;
+    border:1px solid rgba(26,29,43,.12);
+    backface-visibility:hidden;
+    overflow:hidden;
+    box-shadow: 0 16px 44px rgba(0,0,0,.10);
+    background:rgba(255,255,255,.78);
+  }
+  .face.back{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .pattern{
+    width:100%;
+    height:100%;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(251,113,133,.20), transparent 45%),
+      radial-gradient(circle at 70% 30%, rgba(96,165,250,.20), transparent 45%),
+      radial-gradient(circle at 50% 80%, rgba(52,211,153,.18), transparent 50%),
+      linear-gradient(135deg, rgba(255,255,255,.85), rgba(255,255,255,.65));
+  }
+  .face.front{
+    transform: rotateY(180deg);
+    display:flex;
+    flex-direction:column;
+  }
+
+  .frontTop{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 12px 0;
+    flex-wrap:wrap;
+    row-gap:8px;
+  }
+
+  .art{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:10px 12px 6px;
+    flex:1 1 auto;
+    overflow:visible;
+  }
+  .art img{
+    width:160px;
+    height:auto;
+    max-height:250px;
+    border-radius:18px;
+    border:1px solid rgba(26,29,43,.10);
+    box-shadow: 0 14px 28px rgba(0,0,0,.10);
+    object-fit:cover;
+    background:rgba(255,255,255,.70);
+  }
+
+  .frontBody{
+    padding:10px 14px 14px;
+    border-top:1px solid rgba(26,29,43,.08);
+    background:rgba(255,255,255,.76);
+  }
+  .name{
+    font-size:18px;
+    font-weight:950;
+    margin-bottom:6px;
+  }
+  .meaning{
+    margin:0;
+    font-size:12px;
+    color:rgba(26,29,43,.65);
+    line-height:1.45;
+  }
+
+  @media (max-width: 520px){
+    :root{ --flipH: 560px; }
+    .art img{ max-height: 220px; }
+  }
+
+  /* reading box */
+  .reading{
+    margin:0 18px 18px;
+    border-radius:20px;
+    border:1px solid rgba(26,29,43,.10);
+    background:rgba(255,255,255,.72);
+    box-shadow:0 14px 36px rgba(0,0,0,.08);
+    overflow:hidden;
+  }
+  .reading .inner{ padding:16px 16px 14px; }
+  .section{
+    padding:12px 12px;
+    border-radius:16px;
+    border:1px solid rgba(26,29,43,.08);
+    background:rgba(255,255,255,.72);
+    margin-bottom:10px;
+  }
+  .secTitle{
+    font-weight:950;
+    margin-bottom:8px;
+    font-size:13px;
+    color:rgba(26,29,43,.80);
+  }
+  .p{
+    font-size:13.5px;
+    color:rgba(26,29,43,.72);
+    line-height:1.55;
+  }
+  ul{ margin:8px 0 0 18px; padding:0; }
+  li{ margin:6px 0; }
+
+  .disclaimer{
+    padding:0 18px 16px;
+    color:rgba(26,29,43,.60);
+    font-size:12.5px;
+    line-height:1.45;
+  }
+
+  /* share card */
+  .shareWrap{
+    margin:0 18px 18px;
+    border-radius:22px;
+    overflow:hidden;
+    border:1px solid rgba(26,29,43,.10);
+    background:rgba(255,255,255,.78);
+    box-shadow:0 18px 50px rgba(0,0,0,.10);
+  }
+  .shareHeader{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:14px 14px 10px;
+    align-items:flex-start;
+    border-bottom:1px solid rgba(26,29,43,.08);
+  }
+  .shareTitle{
+    font-weight:1000;
+    font-size:16px;
+    margin:0;
+  }
+  .shareMeta{
+    font-size:12.5px;
+    color:rgba(26,29,43,.60);
+    margin-top:4px;
+  }
+  .shareBody{
+    display:grid;
+    grid-template-columns: 210px 1fr;
+    gap:12px;
+    padding:12px 14px 14px;
+    align-items:start;
+  }
+  @media (max-width: 980px){
+    .shareBody{ grid-template-columns:1fr; }
+  }
+
+  .shareTree{
+    width:190px;
+    height:230px;
+    position:relative;
+    border-radius:18px;
+    border:1px solid rgba(26,29,43,.10);
+    background:
+      radial-gradient(200px 140px at 40% 20%, rgba(255,255,255,.80), transparent 65%),
+      linear-gradient(135deg, rgba(255,255,255,.75), rgba(255,255,255,.55));
+    overflow:hidden;
+  }
+  .shareTree::after{
+    content:"";
+    position:absolute;
+    inset:-20px;
+    background: radial-gradient(240px 180px at 45% 35%, var(--treeGlow), transparent 68%);
+    pointer-events:none;
+  }
+  .shareTree .star{
+    position:absolute;
+    top:10px; left:50%;
+    transform:translateX(-50%);
+    color:var(--treeStar);
+    text-shadow: 0 0 26px var(--treeStarGlow);
+    font-size:30px;
+    z-index:2;
+  }
+  .shareTree .layer{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    border-radius:999px;
+    background: linear-gradient(135deg, var(--treeA), var(--treeB));
+    z-index:1;
+  }
+  .shareTree .l1{ width:150px; height:60px; top:52px; }
+  .shareTree .l2{ width:125px; height:56px; top:96px; opacity:.98; }
+  .shareTree .l3{ width:98px; height:52px; top:136px; opacity:.98; }
+  .shareTree .trunk{
+    position:absolute;
+    width:48px; height:30px;
+    background: linear-gradient(135deg, #c08457, #9a5b2d);
+    border-radius:12px;
+    left:50%; transform:translateX(-50%);
+    top:182px;
+    z-index:1;
+  }
+
+  .ornaments{ position:absolute; inset:0; pointer-events:none; z-index:3; }
+  .orn{
+    position:absolute;
+    font-size:16px;
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,.15));
+    animation: floaty 2.6s ease-in-out infinite;
+    opacity: .95;
+  }
+  .orn.small{ font-size:14px; opacity:.9; }
+  .orn.big{ font-size:18px; }
+  @keyframes floaty{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-3px); }
+  }
+
+  .shareTextBox{
+    border-radius:18px;
+    border:1px solid rgba(26,29,43,.10);
+    background:rgba(255,255,255,.74);
+    padding:12px 12px;
+    min-height:230px;
+    white-space:pre-wrap;
+    font-size:12.8px;
+    color:rgba(26,29,43,.72);
+    line-height:1.45;
+  }
+
+  /* toast */
+  .toast{
+    position:fixed;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(26,29,43,.92);
+    color:#fff;
+    padding:10px 14px;
+    border-radius:999px;
+    font-weight:900;
+    font-size:13px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .25s ease, transform .25s ease;
+    box-shadow:0 18px 40px rgba(0,0,0,.20);
+    z-index:9999;
+  }
+  .toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(-4px);
+  }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1 id="title">✨ New Year Divination, 2026</h1>
+      <p class="subtitle" id="subtitle">
+        The year's close offers a sacred pause. We invite you to reflect by the warmth of the Yule hearth and cast your deepest hopes upon the cards. The generated reading will illuminate the purpose and prophecy awaiting you in 2026, based on just 3-5 keywords for where you stand today, and what you seek for tomorrow.
+      </p>
+      <div class="topbar">
+        <div class="pill" id="statusPill">🌟 Ready</div>
+        <div class="langToggle">
+          <button id="btnEN" type="button" class="active">EN</button>
+          <button id="btnZH" type="button">中文</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: form -->
+      <div class="panel">
+        <div class="inner">
+          <div class="treeBox" aria-hidden="true">
+            <div class="miniSigilWrap">
+              <div class="miniSigil">
+                <div class="miniSigilDash"></div>
+                <div class="miniSigilStar">✧</div>
+              </div>
+
+              <div class="miniSigilLabel">
+                <span class="miniSigilSpark">✦</span>
+                HOLIDAY TAROT
+                <span class="miniSigilSpark">✦</span>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="promptTitle">Your info</h2>
+          <p class="hint" id="promptHint">
+            Words should be comma separated. After you generate once, the 2025 words will lock to keep the past stable.
+          </p>
+
+          <div class="row2">
+            <div>
+              <label id="lblName" for="name">Name (optional)</label>
+              <input id="name" placeholder="Apple"/>
+            </div>
+            <div>
+              <label id="lblAge" for="age">Age</label>
+              <input id="age" inputmode="numeric" placeholder="25"/>
+            </div>
+          </div>
+
+          <div class="row2" style="margin-top:12px;">
+            <div>
+              <label id="lblMbti" for="mbti">MBTI (optional)</label>
+              <input id="mbti" placeholder="INTP/ENFP"/>
+            </div>
+            <div>
+              <label id="lblZodiac" for="zodiac">Constellation</label>
+              <select id="zodiac" required>
+                <option value="">Select your constellation</option>
+                <option value="aries">Aries（白羊座）</option>
+                <option value="taurus">Taurus（金牛座）</option>
+                <option value="gemini">Gemini（双子座）</option>
+                <option value="cancer">Cancer（巨蟹座）</option>
+                <option value="leo">Leo（狮子座）</option>
+                <option value="virgo">Virgo（处女座）</option>
+                <option value="libra">Libra（天秤座）</option>
+                <option value="scorpio">Scorpio（天蝎座）</option>
+                <option value="sagittarius">Sagittarius（射手座）</option>
+                <option value="capricorn">Capricorn（摩羯座）</option>
+                <option value="aquarius">Aquarius（水瓶座）</option>
+                <option value="pisces">Pisces（双鱼座）</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row1" style="margin-top:12px;">
+            <div>
+              <label id="lblSelf" for="selfWords">3–5 words: you in 2025</label>
+              <input id="selfWords" placeholder="e.g., tired, hard-working, growth"/>
+            </div>
+            <div>
+              <label id="lblHope" for="hopeWords">3–5 words: your 2026 hopes</label>
+              <input id="hopeWords" placeholder="e.g., health, clarity, self-care"/>
+            </div>
+            <div>
+              <label id="lblGoal" for="goal">Most important 2026 goal</label>
+              <select id="goal">
+                <option value="career">career</option>
+                <option value="love">love</option>
+                <option value="family">family</option>
+                <option value="health">health</option>
+                <option value="money">money</option>
+                <option value="self-growth">self-growth</option>
+                <option value="creativity">creativity</option>
+                <option value="adventure">adventure</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="btnRow">
+            <button class="btn primary" type="button" id="drawBtn">🎴 Draw & reveal</button>
+            <button class="btn secondary" type="button" id="surpriseBtn">🎁 Surprise</button>
+            <button class="btn ghost" type="button" id="downloadBtn">🖼️ Download card</button>
+            <button class="btn ghost" type="button" id="resetBtn">↩ Reset</button>
+          </div>
+
+          <div class="privacy" id="privacyNote">
+            Note: This page runs locally in your browser.
+          </div>
+
+          <div style="
+            margin-top: 24px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f7f7f7;
+          ">
+            <div class="input-section">
+                <h4 class="section-title" id="oracleTitle">🔮 Yes/No Oracle </h4>
+                <p class="description" id="oracleDescription">Think of a "Yes/No" question, enter a number you like, and let the "Dice of Fate" guide you.</p>
+
+                <div class="oracle-input-group" style="display: flex; gap: 10px; margin-top: 10px; align-items: center;">
+                    <input type="number" id="oracleInputNumber" min="1" max="99" placeholder="Enter a number 1-99" oninput="limitInput(this)" style="flex-grow: 1; padding: 8px;">
+                    <button id="oracleRollButton" type="button" class="btn secondary">Get Answer</button>
+                </div>
+
+                <div id="oracleResult" class="oracle-result-box" style="min-height: 20px; margin-top: 10px; padding: 5px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="rightTop">
+          <div>
+            <h2 id="spreadTitle">Your 3-card spread</h2>
+            <div class="subhint" id="spreadHint">Past → Present → Future</div>
+          </div>
+          <div class="spreadTag">
+            <div class="tagPill" id="spreadTag">Not drawn yet</div>
+          </div>
+        </div>
+
+        <div class="chips" id="chips"></div>
+        <div class="cards" id="cards"></div>
+
+        <div class="reading">
+          <div class="inner">
+            <h2 id="readingTitle" style="margin:0 0 10px;">✨ Your reading</h2>
+            <div id="readingContent"></div>
+          </div>
+          <div class="disclaimer" id="disclaimer"></div>
+        </div>
+
+        <div class="shareWrap" id="shareCard">
+          <div class="shareHeader">
+            <div>
+              <p class="shareTitle" id="shareTitle" style="margin:0;">Holiday Tarot 2026</p>
+              <div class="shareMeta" id="shareMeta">Ready to draw.</div>
+            </div>
+          </div>
+          <div class="shareBody">
+            <div class="shareTree" id="shareTree">
+              <div class="star">⭐</div>
+              <div class="layer l1"></div>
+              <div class="layer l2"></div>
+              <div class="layer l3"></div>
+              <div class="trunk"></div>
+              <div class="ornaments" id="ornaments"></div>
+            </div>
+            <div class="shareTextBox" id="shareBody"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Saved!</div>
+
+  <script>
+/* =========================================================
+   CONFIG
+   ========================================================= */
+const REAL_TAROT_IMAGES = false;
+
+/* =========================================================
+   i18n
+   ========================================================= */
+let LANG = "en";
+const t = {
+  en: {
+    title: "✨ New Year Divination",
+    subtitle: "The year's close offers a sacred pause. We invite you to reflect by the warmth of the Yule hearth and cast your deepest hopes upon the cards. The generated reading will illuminate the purpose and prophecy awaiting you in 2026, based on just 3-5 keywords for where you stand today, and what you seek for tomorrow.",
+    ready: "🌟 Ready",
+    promptTitle: "Your info",
+    promptHint: "Words should be comma separated. After you generate once, the 2025 words will be locked.",
+    name: "Name (optional)",
+    age: "Age",
+    mbti: "MBTI (optional)",
+    zodiac: "Constellation",
+    zodiacPlaceholder: "Select your constellation",
+    self: "3–5 words: you in 2025",
+    hope: "3–5 words: your 2026 hopes",
+    goal: "Most important 2026 goal",
+    draw: "🎴 Draw & reveal",
+    surprise: "🎁 Random",
+    download: "🖼️ Download card",
+    reset: "↩ Reset",
+    privacy: "Note: This page runs locally in your browser—nothing is uploaded.",
+    spreadTitle: "Your 3-card spread",
+    spreadHint: "Past → Present → Future",
+    notDrawn: "Not drawn yet",
+    readingTitle: "✨ Your reading",
+    disclaimer: "Tarot is for reflection and vibes, not guaranteed outcomes. Keep what resonates; skip what doesn’t.",
+    needAge: "Please enter your age (a number).",
+    needWords: "Use 3–5 words in each keywords box.",
+    needZodiac: "Please select your constellation.",
+    locked: "🔒 2025 words are locked (Reset to edit).",
+    generated: "✨ Reading generated",
+    shareReady: "Ready to draw.",
+    shareGenerated: "Card of Power and Guidance",
+    downloading: "🖼️ Creating image…",
+    saved: "✅ Saved!",
+    downloadFail: "Couldn’t generate image. Try again (Chrome recommended).",
+    oracleTitle: "🔮 Yes/No Oracle",
+    oracleDescription: "Think of a 'Yes/No' question, enter a number you like, and let the 'Dice of Fate' guide you.",
+    oraclePlaceholder: "1-99",
+    oracleButton: "🔍",
+    oracleError: "Please enter a valid number between 1 and 99.",
+    oracleStrongYes: "✅ Strong YES: Your wish is affirmed by the universe. Act decisively!",
+    oracleYesEffort: "🟡 Yes, with effort: The direction is right, but requires focus and patience.",
+    oracleNoReconsider: "🟠 No, reconsider: The timing may be off, or your approach needs modification.",
+    oracleNotAdvised: "❌ Not Advised: Wait for a clearer signal. Now is not the best time to act."
+  },
+  zh: {
+    title: "✨ 新年塔罗占卜",
+    subtitle: "年底了，这是一个很适合停下来思考的时刻。咱们就着炉火的温暖，好好内观一下自己，把你对来年最深的期待，通过卡牌投射出来。这份解读会帮你看到26年的重点和方向，只需要你用3到5个词，描述一下「今天的你」以及「明天想成为的你」。",
+    ready: "🌟 准备好了",
+    promptTitle: "你的信息",
+    promptHint: "关键词用逗号分隔。生成一次后，2025 的关键词会锁定。",
+    name: "名字（可选）",
+    age: "年龄",
+    mbti: "MBTI（可选）",
+    zodiac: "星座",
+    zodiacPlaceholder: "请选择星座",
+    self: "3–5 个词：2025 的你",
+    hope: "3–5 个词：对 2026 的期待",
+    goal: "2026 最重要的目标",
+    draw: "🎴 抽牌并翻开",
+    surprise: "🎁 随机示例",
+    download: "🖼️ 下载图片卡",
+    reset: "↩ 重置",
+    privacy: "提示：页面只在浏览器本地运行，不会上传你的信息。",
+    spreadTitle: "你的三张牌阵",
+    spreadHint: "从过去 → 现在 → 未来",
+    notDrawn: "还没抽牌",
+    readingTitle: "解读",
+    disclaimer: "塔罗的意义在于内观自省、捕捉灵感，结果仅供参考。请听从你内心深处的共鸣，将其作为一份指引就好。",
+    needAge: "请填写年龄（数字）。",
+    needWords: "两栏关键词都需要3–5个词（用逗号分隔）。",
+    needZodiac: "请选择你的星座。",
+    locked: "🔒 25年关键词已锁定（重置后可编辑）",
+    generated: "✨ 已生成解读",
+    shareReady: "准备抽牌。",
+    shareGenerated: "力量指引卡",
+    downloading: "🖼️ 正在生成图片…",
+    saved: "✅ 已保存！",
+    downloadFail: "生成图片失败。建议用Chrome再试一次。",
+    oracleTitle: "🔮 是/否 快速指引",
+    oracleDescription: "在心中默想一个“是/否”问题，并输入一个您心仪的数字，让“命运骰子”为您揭示答案。",
+    oraclePlaceholder: "1-99",
+    oracleButton: "🔍",
+    oracleError: "请输入 1 到 99 之间的有效数字。",
+    oracleStrongYes: "✅ 强力支持：你的愿望已获宇宙的肯定，请果断行动！",
+    oracleYesEffort: "⚠️ 是，但需努力：方向是对的，但需要你付出专注和耐心。",
+    oracleNoReconsider: "🟧 否，需重思：时机可能不对，或需要修改你的提问或方法。",
+    oracleNotAdvised: "❌ 暂不建议：请等待更明确的信号，现在不是采取行动的最佳时机。"
+  }
+};
+
+/* =========================================================
+   STATE + REFS
+   ========================================================= */
+const STATE = {
+  drawn:false,
+  lockedSelf:false,
+  cards:[],
+  profile:null,
+  theme:{ color:"green", vibe:"soft" }
+};
+
+const toast = document.getElementById("toast");
+const statusPill = document.getElementById("statusPill");
+const spreadTag = document.getElementById("spreadTag");
+const cardsEl = document.getElementById("cards");
+const chipsEl = document.getElementById("chips");
+const readingContent = document.getElementById("readingContent");
+const shareBody = document.getElementById("shareBody");
+const shareMeta = document.getElementById("shareMeta");
+const ornamentsEl = document.getElementById("ornaments");
+
+const nameInput = document.getElementById("name");
+const ageInput = document.getElementById("age");
+const mbtiInput = document.getElementById("mbti");
+const zodiacSelect = document.getElementById("zodiac");
+const selfInput = document.getElementById("selfWords");
+const hopeInput = document.getElementById("hopeWords");
+const goalSelect = document.getElementById("goal");
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 2800);
+}
+function normalizeWords(s){
+  return (s || "").replace(/[•|/]/g, " ").replace(/\s+/g, " ").trim();
+}
+function parseWords(s){
+  const tt = normalizeWords(s);
+  if(!tt) return [];
+  const parts = tt.includes(",") ? tt.split(",") : tt.split(" ");
+  return parts.map(x=>x.trim()).filter(Boolean).slice(0,5);
+}
+function validateRange(arr){ return arr.length >= 3 && arr.length <= 5; }
+function cap(s){ return s ? (s[0].toUpperCase() + s.slice(1)) : s; }
+function clampAge(age){
+  if(!Number.isFinite(age)) return null;
+  return Math.max(10, Math.min(100, age));
+}
+function pickFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+/* =========================================================
+   LANGUAGE SWITCH
+   ========================================================= */
+function setLang(lang){
+  LANG = lang;
+  document.getElementById("btnEN").classList.toggle("active", lang==="en");
+  document.getElementById("btnZH").classList.toggle("active", lang==="zh");
+  document.documentElement.lang = (LANG==="zh" ? "zh" : "en");
+
+  const L = t[LANG];
+  document.getElementById("title").textContent = L.title;
+  document.getElementById("subtitle").textContent = L.subtitle;
+  document.getElementById("statusPill").textContent = STATE.drawn ? L.generated : L.ready;
+
+  document.getElementById("promptTitle").textContent = L.promptTitle;
+  document.getElementById("promptHint").textContent = L.promptHint;
+
+  document.getElementById("lblName").textContent = L.name;
+  document.getElementById("lblAge").textContent = L.age;
+  document.getElementById("lblMbti").textContent = L.mbti;
+  document.getElementById("lblZodiac").textContent = L.zodiac;
+  document.querySelector("#zodiac option[value='']").textContent = L.zodiacPlaceholder;
+
+  document.getElementById("lblSelf").textContent = L.self;
+  document.getElementById("lblHope").textContent = L.hope;
+  document.getElementById("lblGoal").textContent = L.goal;
+
+  document.getElementById("drawBtn").textContent = L.draw;
+  document.getElementById("surpriseBtn").textContent = L.surprise;
+  document.getElementById("downloadBtn").textContent = L.download;
+  document.getElementById("resetBtn").textContent = L.reset;
+
+  document.getElementById("privacyNote").textContent = L.privacy;
+  document.getElementById("spreadTitle").textContent = L.spreadTitle;
+  document.getElementById("spreadHint").textContent = L.spreadHint;
+  document.getElementById("readingTitle").textContent = L.readingTitle;
+
+  // Oracle texts update
+  document.getElementById("oracleTitle").textContent = L.oracleTitle;
+  document.getElementById("oracleDescription").textContent = L.oracleDescription;
+  document.getElementById("oracleInputNumber").placeholder = L.oraclePlaceholder;
+  document.getElementById("oracleRollButton").textContent = L.oracleButton;
+
+  if(!STATE.drawn){
+    document.getElementById("spreadTag").textContent = L.notDrawn;
+    document.getElementById("shareMeta").textContent = L.shareReady;
+    document.getElementById("shareTitle").textContent = (LANG==="zh" ? "2026 塔罗图片卡" : "Holiday Tarot 2026");
+    document.getElementById("disclaimer").textContent = "";
+    document.getElementById("readingContent").innerHTML = "";
+    document.getElementById("shareBody").textContent = "";
+  } else {
+    renderAll();
+  }
+}
+
+document.getElementById("btnEN").addEventListener("click", ()=>setLang("en"));
+document.getElementById("btnZH").addEventListener("click", ()=>setLang("zh"));
+
+/* =========================================================
+   ORACLE
+   ========================================================= */
+function limitInput(element) {
+  if (element.value < 1) element.value = 1;
+  if (element.value > 99) element.value = 99;
+}
+function generateOracleResult() {
+  const inputEl = document.getElementById("oracleInputNumber");
+  const resultEl = document.getElementById("oracleResult");
+  const userNumber = parseInt(inputEl.value, 10);
+
+  if (isNaN(userNumber) || userNumber < 1 || userNumber > 99) {
+    resultEl.innerHTML = `<span style="color: red;">${t[LANG].oracleError}</span>`;
+    return;
+  }
+
+  const randomNumber = Math.floor(Math.random() * 100) + 1;
+  const total = userNumber + randomNumber;
+  const remainder = total % 5;
+
+  let resultText = "";
+  let styleColor = "";
+
+  if (remainder === 0 || remainder === 1) {
+    resultText = t[LANG].oracleStrongYes;
+    styleColor = "#10b981";
+  } else if (remainder === 2) {
+    resultText = t[LANG].oracleYesEffort;
+    styleColor = "#f59e0b";
+  } else if (remainder === 3) {
+    resultText = t[LANG].oracleNoReconsider;
+    styleColor = "#f97316";
+  } else {
+    resultText = t[LANG].oracleNotAdvised;
+    styleColor = "#ef4444";
+  }
+
+  resultEl.innerHTML = `<span style="font-weight: bold; color: ${styleColor};">${resultText}</span>`;
+}
+
+/* =========================================================
+   TAROT DECK + EVERYTHING ELSE
+   (Your original logic below is unchanged except one tiny fix in renderAll)
+   ========================================================= */
+const deck = [
+  { nameEN:"The Star", nameZH:"星星", vibeEN:"Hope & renewal", vibeZH:"希望与复苏",
+    baseEN:"Gentle healing is underway. Believe in the long-range vision and move forward with quiet confidence.",
+    baseZH:"内心正在悄然愈合，充满希望。相信你的长远愿景，带着这份宁静的自信向前迈进。",
+    imgReal:"images/star.jpg" },
+  { nameEN:"The Sun", nameZH:"太阳", vibeEN:"Joy & clarity", vibeZH:"喜悦与真我",
+    baseEN:"Feel the warmth of success and be visible. Authentic clarity overpowers frantic effort.",
+    baseZH:"充满自信与活力，享受被看见。忠于真我的清晰目标，远胜于盲目追逐。",
+    imgReal:"images/sun.jpg" },
+  { nameEN:"The Fool", nameZH:"愚者", vibeEN:"Fresh start", vibeZH:"新的开始",
+    baseEN:"Take a brave leap into the unknown. The time for learning is now—don't wait for perfection.",
+    baseZH:"勇敢地迈出第一步。此刻就是学习的最佳时机，放下对完美的苛求，在实践中探索。",
+    imgReal:"images/fool.jpg" },
+  { nameEN:"The High Priestess", nameZH:"女祭司", vibeEN:"Inner knowing", vibeZH:"直觉与洞察",
+    baseEN:"Trust your intuition and access hidden wisdom. Create space to hear the quiet, vital data within.",
+    baseZH:"相信你的直觉，内在的智慧正在显现。隔绝外界干扰，捕捉内心深处最重要的信号。",
+    imgReal:"images/high_priestess.jpg" },
+  { nameEN:"The Empress", nameZH:"女皇", vibeEN:"Growth & nurture", vibeZH:"丰盛与滋养",
+    baseEN:"Abundance flows from self-care and creativity. Build sustainable routines that truly nourish your life.",
+    baseZH:"丰盛源于自我关爱与创造力。建立一套真正滋养你身心的日常习惯，感受万物的生长。",
+    imgReal:"images/empress.jpg" },
+  { nameEN:"The Magician", nameZH:"魔术师", vibeEN:"Momentum", vibeZH:"显化与行动",
+    baseEN:"You have all the necessary tools. Commit to a clear direction and demonstrate that your skill is real.",
+    baseZH:"资源、天赋和时机已就位。定下方向果断投入，用行动证明你的能力足以将意图显化。",
+    imgReal:"images/magician.jpg" },
+  { nameEN:"Strength", nameZH:"力量", vibeEN:"Courage", vibeZH:"温柔的征服",
+    baseEN:"Inner power is gentle yet firm. Be patient and kind to yourself while staying unshakeable in your resolve.",
+    baseZH:"温柔而坚定的内在力量最为强大。对自己抱持耐心与慈悲，但在原则问题上要站稳。",
+    imgReal:"images/strength.jpg" },
+  { nameEN:"Justice", nameZH:"正义", vibeEN:"Alignment", vibeZH:"平衡与因果",
+    baseEN:"Seek fairness and clean boundaries. The reality you consistently reinforce is the one that will manifest.",
+    baseZH:"做出公正、平衡的选择，划清界限。你持续投入精力的地方，终将成为你的现实。",
+    imgReal:"images/justice.jpg" },
+  { nameEN:"Temperance", nameZH:"节制", vibeEN:"Harmony", vibeZH:"调和与节奏",
+    baseEN:"Find your sacred rhythm. Small, deliberate adjustments now will create deep, lasting stability.",
+    baseZH:"调节好自己的内在节奏是此刻最好的良药。有意识的修正，带来长久的稳定与平衡。",
+    imgReal:"images/temperance.jpg" },
+  { nameEN:"Wheel of Fortune", nameZH:"命运之轮", vibeEN:"Turning point", vibeZH:"转折与机会",
+    baseEN:"The cycles of fortune are turning. Embrace flexibility to transform change into a genuine opportunity.",
+    baseZH:"命运正在悄悄转折。保持灵活，把眼前的变化变成你的好机会。",
+    imgReal:"images/wheel.jpg" },
+  { nameEN:"The World", nameZH:"世界", vibeEN:"Completion", vibeZH:"圆满与升级",
+    baseEN:"A major chapter closes successfully. This achievement is earned, and you are ready to level up your life.",
+    baseZH:"一个重要的阶段已圆满收官。这份成就是你努力的成果，你已准备好迈向更广阔的天地。",
+    imgReal:"images/world.jpg" },
+  { nameEN:"The Lovers", nameZH:"恋人", vibeEN:"Choice & connection", vibeZH:"价值与选择",
+    baseEN:"The decision is moral and emotional. Prioritize your core values over external pressure or performance.",
+    baseZH:"做出忠于内心的选择。以你的核心价值观为优先，而不是为了迎合外界的期待。",
+    imgReal:"images/lovers.jpg" },
+  { nameEN:"The Chariot", nameZH:"战车", vibeEN:"Drive", vibeZH:"征服与推进",
+    baseEN:"Achieve focused progress through willpower. Self-discipline and clear boundaries are your path to freedom.",
+    baseZH:"目标明确，大胆向前冲刺。你会发现，良好的自律能带来更大的掌控感和自由。",
+    imgReal:"images/chariot.jpg" },
+  { nameEN:"Death", nameZH:"死神", vibeEN:"Transformation", vibeZH:"蜕变与重生",
+    baseEN:"A powerful ending is required for the new beginning. The inevitable upgrade follows the necessary goodbye.",
+    baseZH:"是时候放下不再服务你的旧事物了。真正的蜕变与重生，都从勇敢告别开始。",
+    imgReal:"images/death.jpg" },
+  { nameEN:"The Hermit", nameZH:"隐者", vibeEN:"Reflection", vibeZH:"内省与智慧",
+    baseEN:"Withdraw to gain clarity and insight. Quiet solitude is the necessary strategy before action.",
+    baseZH:"从喧嚣中退一步，才能看得更清楚。独处的时光是在为你酝酿更深远的策略与智慧。",
+    imgReal:"images/hermit.jpg" },
+  { nameEN: "The Hanged Man",
+    nameZH: "倒吊人",
+    vibeEN: "Perspective Shift",
+    vibeZH: "颠覆视角",
+    baseEN: "Stop fighting and surrender. A necessary pause will reveal a new angle on your situation.",
+    baseZH: "停止挣扎，学会臣服。一次必要的暂停，会从全新的角度揭示问题的真相。",
+    imgReal: "images/hanged_man.jpg"},
+  { nameEN: "The Devil",
+    nameZH: "恶魔",
+    vibeEN: "Restriction & Obsession",
+    vibeZH: "执念与束缚",
+    baseEN: "You are trapped by self-made chains. Name your unhealthy attachments; you have the power to break free.",
+    baseZH: "你被自己制造的枷锁困住。认清那些不健康的执念，你拥有随时挣脱的力量。",
+    imgReal: "images/devil.jpg"},
+  { nameEN: "The Moon",
+    nameZH: "月亮",
+    vibeEN: "Illusion & Intuition",
+    vibeZH: "幻象与潜意识",
+    baseEN: "Navigate the fog by instinct. Trust your deep intuition over logic to see through confusion and fear.",
+    baseZH: "在迷雾中靠本能导航。相信你的直觉而非逻辑，它能穿透混乱和幻象。",
+    imgReal: "images/moon.jpg"},
+  { nameEN: "Judgement",
+    nameZH: "审判",
+    vibeEN: "Reckoning & Calling",
+    vibeZH: "觉醒与召唤",
+    baseEN: "Answer the call to a higher purpose. Self-assessment and forgiveness are required before your next great leap.",
+    baseZH: "回应更高的使命召唤。在做出下一次飞跃前，需要回顾过去并宽恕自己。",
+    imgReal: "images/judgement.jpg"}
+];
+
+function svgToDataUrl(svg){
+  const encoded = encodeURIComponent(svg).replace(/'/g,"%27").replace(/"/g,"%22");
+  return `data:image/svg+xml;charset=utf-8,${encoded}`;
+}
+function hash(str){
+  let h = 2166136261;
+  for (let i=0;i<str.length;i++){
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function pickGlyph(seed){
+  // Added more glyphs for more variety (☿, ♄, ♃, ♆)
+  const glyphs = ["✦","✧","☉","☾","⚝","⚜","✶","⟡","⚹","✷","❖","⟠","✺","☿","♄","♃","♆"];
+  return glyphs[seed % glyphs.length];
+}
+function escapeXml(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function stars(seed){
+  let s = "";
+  for(let i=0;i<26;i++){
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    const x = 42 + (seed % 336);
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    const y = 44 + (seed % 210);
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    const r = 0.8 + ((seed % 12) / 10);
+    const o = 0.14 + ((seed % 55) / 240);
+    s += `<circle cx="${x}" cy="${y}" r="${r}" fill="rgba(26,29,43,${o})"/>`;
+  }
+  return s;
+}
+function makeCardArt(cardName, themeA, themeB){
+  const seed = hash(cardName);
+  const glyph = pickGlyph(seed);
+  const wave = (seed % 12) + 8;
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="420" height="680" viewBox="0 0 420 680">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="${themeA}" stop-opacity="0.96"/>
+          <stop offset="1" stop-color="${themeB}" stop-opacity="0.96"/>
+        </linearGradient>
+        <radialGradient id="glow" cx="30%" cy="20%" r="70%">
+          <stop offset="0" stop-color="#fff" stop-opacity="0.26"/>
+          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.16"/>
+        </filter>
+      </defs>
+
+      <rect x="18" y="18" width="384" height="644" rx="28" fill="url(#bg)" filter="url(#softShadow)"/>
+      <rect x="28" y="28" width="364" height="624" rx="24" fill="none" stroke="rgba(26,29,43,0.18)" stroke-width="2"/>
+      <rect x="18" y="18" width="384" height="644" rx="28" fill="url(#glow)"/>
+
+      ${stars(seed)}
+
+      <g opacity="0.92">
+        <text x="210" y="350" text-anchor="middle" font-size="92" fill="rgba(26,29,43,0.78)"
+              font-family="ui-sans-serif, system-ui">${glyph}</text>
+      </g>
+
+      <path d="M 28 520 C 90 ${520-wave} 150 ${520+wave} 210 520 C 270 ${520-wave} 330 ${520+wave} 392 520 L 392 620 L 28 620 Z"
+            fill="rgba(255,255,255,0.18)"/>
+      <path d="M 28 550 C 90 ${550+wave} 150 ${550-wave} 210 550 C 270 ${550+wave} 330 ${550-wave} 392 550"
+            fill="none" stroke="rgba(26,29,43,0.18)" stroke-width="2"/>
+
+      <rect x="58" y="590" width="304" height="52" rx="16" fill="rgba(255,255,255,0.30)" stroke="rgba(26,29,43,0.14)"/>
+      <text x="210" y="624" text-anchor="middle" font-size="18" fill="rgba(26,29,43,0.86)"
+            font-family="ui-sans-serif, system-ui" font-weight="900">
+        ${escapeXml(cardName)}
+      </text>
+    </svg>
+  `;
+  return svgToDataUrl(svg);
+}
+function cardColors(nameEN){
+  const map = {
+    "The Star": ["#b9e6ff", "#c9ffe8"],
+    "The Sun": ["#ffe2b9", "#ffd0dc"],
+    "The Fool": ["#d6d3ff", "#c9ffe8"],
+    "The High Priestess": ["#c6d8ff", "#f3d3ff"],
+    "The Empress": ["#c9ffe8", "#ffe2b9"],
+    "The Magician": ["#ffd0dc", "#c6d8ff"],
+    "Strength": ["#ffe2b9", "#c9ffe8"],
+    "Justice": ["#c6d8ff", "#c9ffe8"],
+    "Temperance": ["#c9ffe8", "#d6d3ff"],
+    "Wheel of Fortune": ["#ffd0dc", "#ffe2b9"],
+    "The World": ["#c9ffe8", "#c6d8ff"],
+    "The Lovers": ["#ffd0dc", "#ffe2b9"],
+    "The Chariot": ["#c6d8ff", "#ffe2b9"],
+    "Death": ["#d6d3ff", "#ffd0dc"],
+    "The Hermit": ["#c6d8ff", "#c9ffe8"],
+    
+    // --- Newly Added Cards ---
+    "The Hanged Man": ["#a8c0ff", "#d6d3ff"], 
+    "The Devil": ["#e2b9c9", "#d6d3ff"],
+    "The Moon": ["#c6d8ff", "#f3d3ff"],
+    "Judgement": ["#ffe2b9", "#b9e6ff"]       
+};
+  return map[nameEN] || ["#c6d8ff","#c9ffe8"];
+}
+function pick3(){
+  const copy = [...deck];
+  const out = [];
+  for(let i=0;i<3;i++){
+    const idx = Math.floor(Math.random()*copy.length);
+    const card = copy.splice(idx,1)[0];
+    const [a,b] = cardColors(card.nameEN);
+    out.push({ ...card, img: REAL_TAROT_IMAGES ? card.imgReal : makeCardArt(card.nameEN, a, b) });
+  }
+  return out;
+}
+
+/* ===== zodiac + reading engine + other helpers ===== */
+/* (keeping your original functions; omitted here for brevity in this message would break copy/paste) */
+
+/* =========================================================
+   IMPORTANT:
+   Paste the REST of your original JS here unchanged
+   (from zodiacFlavor... all the way down),
+   EXCEPT keep this one line in renderAll:
+   shareMeta.textContent = t[LANG].shareGenerated;
+   ========================================================= */
+function zodiacFlavor(z){
+  const enMap = {
+    aries:"bold starts", taurus:"steady building", gemini:"curiosity & learning",
+    cancer:"home & feelings", leo:"visibility & confidence", virgo:"systems & craft",
+    libra:"balance & relationships", scorpio:"depth & transformation", sagittarius:"adventure & truth",
+    capricorn:"ambition & structure", aquarius:"originality & independence", pisces:"intuition & creativity"
+  };
+  const zhMap = {
+    aries:"充满活力，富有开创精神，有时过于急躁", taurus:"脚踏实地，注重感官体验，固执", gemini:"好奇心强，善于沟通，多才多艺",
+    cancer:"充满爱心，直觉敏锐，多愁善感", leo:"自信，富有戏剧性，雄心勃勃", virgo:"善于分析，注重细节，务实",
+    libra:"追求和谐，平衡，圆滑", scorpio:"强烈，具有变革性，充满激情", sagittarius:"乐观，有哲学思想，热爱自由",
+    capricorn:"自律，负责任，内敛", aquarius:"创新，人道主义，独立", pisces:"富有想象力，富有同情心，敏感"
+  };
+  return { en: enMap[z] || "", zh: zhMap[z] || "" };
+}
+function zodiacNameZH(z){
+  const map = {
+    aries:"白羊座", taurus:"金牛座", gemini:"双子座", cancer:"巨蟹座",
+    leo:"狮子座", virgo:"处女座", libra:"天秤座", scorpio:"天蝎座",
+    sagittarius:"射手座", capricorn:"摩羯座", aquarius:"水瓶座", pisces:"双鱼座"
+  };
+  return map[z] || "";
+}
+
+/* =========================================================
+   “Less generic” reading engine (agent-ish but local)
+   - Uses: 2025/2026 keyword signals + goal lens + zodiac vibe + card combo axis
+   - DOES NOT repeat base meaning (already on card)
+   ========================================================= */
+function cardAxis(card){
+  const m = {
+    "Justice":"alignment",
+    "Temperance":"rhythm",
+    "The Sun":"clarity",
+    "The Star":"renewal",
+    "The Empress":"nurture",
+    "The Magician":"agency",
+    "Strength":"courage",
+    "The Lovers":"values",
+    "The Chariot":"momentum",
+    "Death":"release",
+    "The Hermit":"reflection",
+    "Wheel of Fortune":"flex",
+    "The World":"completion",
+    "The Fool":"start"
+  };
+  return m[card.nameEN] || "focus";
+}
+
+function keywordSignals(words){
+  const w = words.map(x=>String(x).toLowerCase().trim());
+  const has = (...k)=>k.some(x=>w.includes(x));
+  
+  return {
+
+    recovery: has("rest","heal","self-care","health","balance","calm","peace","sleep", 
+                   "restore", "slow", "steady", "wellness", "recharge", "quiet", "renewal", 
+                   "unwind", "detox", "mindfulness", "patience", "ease"),
+    
+    clarity: has("clarity","focus","simple","direction","decisive","clean", 
+                   "structure", "organize", "clear", "intentional", "plan", "boundaries", "purpose",
+                   "vision", "truth", "insight", "strategy", "alignment", "goal"),
+
+    ambition: has("career","success","promotion","money","ambitious","driven","grind","win",
+                    "income", "hustle", "achieve", "visibility", "progress", "goals", "wealth", "fame",
+                    "authority", "leadership", "status", "power", "business", "launch"),
+
+    connection: has("love","relationship","family","friends","connection",
+                     "social", "community", "belonging", "dating", "partner", "intimacy", "vulnerable",
+                     "bond", "marriage", "trust", "communication", "support", "empathy"),
+
+    growth: has("growth","learn","learning","curious","explore","improve",
+                     "skill", "knowledge", "mastery", "change", "upgrade", "better", "evolve", "new",
+                     "potential", "development", "wisdom", "evolve", "expansion"),
+
+    burnout: has("tired","burnout","overwhelmed","stressed","anxious","exhausted",
+                     "fatigue", "drained", "stuck", "frustrated", "pressure", "sad", "grief", "heavy",
+                     "crisis", "trapped", "lost", "doubt", "despair", "confusion"),
+
+    adventure: has("travel", "adventure", "explore", "brave", "risk", "novelty", "fun", "excited", "thrill", 
+                     "spontaneous", "move", "journey", "change of pace", "unknown", "leap"),
+
+    stability: has("stable", "consistent", "secure", "safe", "home", "foundation", "base", "grounded", 
+                     "routine", "steady", "reliable", "anchor", "root", "commitment", "order")
+  };
+}
+
+function goalLens(goal){
+  const en = {
+    love:"connection + honesty + emotional safety",
+    family:"support systems + boundaries + steady presence",
+    health:"energy management + consistency + recovery",
+    career:"focus + visibility + strategy + momentum",
+    money:"stability + smarter choices + long-term security",
+    "self-growth":"identity upgrades + self-trust + new patterns",
+    adventure:"bravery + novelty + saying yes to life",
+    creativity:"play + output + protecting creative time"
+  };
+  const zh = {
+    love:"深度连接 + 真诚沟通 + 情绪踏实感",
+    family:"互相支持 + 明确界限 + 稳定的爱与陪伴",
+    health:"能量管理 + 持续规律 + 高效恢复",
+    career:"专注 + 长期策略 + 执行力",
+    money:"财务稳定 + 聪明消费观 + 长期安心感",
+    "self-growth":"身份蜕变 + 相信自己 + 建立新习惯",
+    adventure:"鼓起勇气 + 拥抱新鲜感 + 对生活说“我愿意”",
+    creativity:"保持玩心 + 确保产出 + 守护你的创作时段"
+  };
+  return LANG==="zh" ? (zh[goal] || "更贴近自己的成长") : (en[goal] || "alignment and progress");
+}
+
+
+function microProfile(profile){
+  const s25 = keywordSignals(profile.selfWords);
+  const s26 = keywordSignals(profile.hopeWords);
+
+  // --- ZH (Mandarin) ---
+  if(LANG==="zh"){
+    // 1. Stress -> Solution
+    if(s25.burnout && s26.recovery) return "你不是不够努力，是努力太久了。2026 年的关键，是把恢复和休息变成一个计划。";
+    // 2. High effort -> Need for strategy
+    if(s25.ambition && s26.clarity) return "你能力很强，但下一步不是更拼命，而是找到更清晰、更持久的努力方向。";
+    // 3. Connection reinforcement
+    if(s25.connection && s26.connection) return "你想要的不是人多热闹，而是真正的确定感：坦诚、界限，以及被温柔以待。";
+    // 4. Growth reinforcement
+    if(s25.growth && s26.growth) return "你正在认真地升级自己。2026 年适合把学习到的知识，转化成看得到的具体成果。";
+    // 5. Growth -> Action/Results
+    if(s25.growth && s26.ambition) return "去年你积累了知识。现在，是时候把这些学习直接转化为事业和财富上的胜利了。";
+    // 6. Extreme Stress -> Need for Safety
+    if(s25.burnout && s26.stability) return "你需要一块坚实的地基。先别想大变动——2026 年要先保护日常，建立安全感。";
+    // 7. Stable Base -> Launchpad
+    if(s25.stability && s26.adventure) return "地基已打好。你的安全感就是你发射的跑道，可以进行有计划的、快乐的冒险。";
+    // 8. Overwork -> Forced Slowdown
+    if(s25.ambition && s26.recovery) return "你已经收获了许多，但也有损耗。明年是维护期，不是追求最大产出的时候。";
+    // 9. Knowing -> Bold Action
+    if(s25.clarity && s26.adventure) return "你已经知道自己要什么了。现在，2026 年的关键是找到大胆、创新的方法去实现它。";
+    // 10. Social Overload -> Better Boundaries
+    if(s25.connection && s26.clarity) return "你已准备好划清界限。2026 年的目标是拥有更少、但质量更高的关系。";
+    // 11. Wanderlust -> Anchoring
+    if(s25.adventure && s26.stability) return "你完成了探索和爆发。现在的胜利在于把这些新发现融入可持续的生活模式。";
+    // 12. Strategy -> Execute
+    if(s25.clarity && s26.ambition) return "目标已经很清晰。2026 年就是全力信任你的方向，并将动能拉到最大。";
+    // 13. Ambition -> Stability
+    if(s25.ambition && s26.stability) return "现在你需要锁定成果。2026 年重点不在于爬得更高，而是要确保你当前所处的高度是稳固的。";
+    // 14. Connection -> Growth
+    if(s25.connection && s26.growth) return "你的关系网提供了成长的安全空间。利用这份支持去推动自己掌握一项新技能。";
+    // 15. Growth -> Clarity
+    if(s25.growth && s26.clarity) return "你吸收了大量新知识。现在的关键是把它们过滤成一个清晰、可执行的方向。";
+    // 16. Recovery -> Ambition
+    if(s25.recovery && s26.ambition) return "你的能量回来了。2026 年就是要用一个明确的目标，来测试你新恢复系统的力量。";
+    // 17. Burnout -> Adventure
+    if(s25.burnout && s26.adventure) return "逃离是可能的，但必须是有计划的。你的冒险应该优先考虑乐趣，而非目的地或成果。";
+    // 18. Adventure -> Growth
+    if(s25.adventure && s26.growth) return "你收集了独特的经验。现在的胜利在于将这些新奇感转化为持久的个人成长。";
+    // 19. Clarity -> Stability
+    if(s25.clarity && s26.stability) return "你已经有了地图。现在的重点是建立可靠、稳定的日常，让前进变成一种习惯。";
+    // 20. Stability -> Growth
+    if(s25.stability && s26.growth) return "你的安全地基已准备就绪。利用这个可预测的基础，启动深度、聚焦的自我发展。";
+
+    // Default/Catch-all
+    return "你正在从“硬撑着过日子”走向“活出真正的自己”，这个转变本身就是最好的兆头。";
+  }
+
+  // --- EN (English) ---
+  
+  // 1. Stress -> Solution
+  if(s25.burnout && s26.recovery) return "You weren’t lazy—you were carrying too much. 2026 is about making recovery a real system.";
+  // 2. High effort -> Need for strategy
+  if(s25.ambition && s26.clarity) return "You’re capable. Your next upgrade isn’t more hustle—it’s direction + sustainability.";
+  // 3. Connection reinforcement
+  if(s25.connection && s26.connection) return "You don’t want chaos—you want safe connection: honesty, boundaries, and being treated well.";
+  // 4. Growth reinforcement
+  if(s25.growth && s26.growth) return "You’re leveling up on purpose. 2026 is about turning learning into visible wins.";
+  // 5. Growth -> Action/Results
+  if(s25.growth && s26.ambition) return "You built the knowledge last year. Now, channel that learning directly into career and financial wins.";
+  // 6. Extreme Stress -> Need for Safety
+  if(s25.burnout && s26.stability) return "You need firm ground. Forget big changes—2026 is about protecting your routine and building safety first.";
+  // 7. Stable Base -> Launchpad
+  if(s25.stability && s26.adventure) return "The groundwork is done. Your security is your launchpad for calculated, joyful risk.";
+  // 8. Overwork -> Forced Slowdown
+  if(s25.ambition && s26.recovery) return "You achieved a lot, but at a cost. Next year is about maintenance, not maximum output.";
+  // 9. Knowing -> Bold Action
+  if(s25.clarity && s26.adventure) return "You know *what* you want. Now, 2026 is about finding bold, new *ways* to get there.";
+  // 10. Social Overload -> Better Boundaries
+  if(s25.connection && s26.clarity) return "You’re ready for better boundaries. The goal is fewer, higher-quality relationships.";
+  // 11. Wanderlust -> Anchoring
+  if(s25.adventure && s26.stability) return "You had your big burst of exploration. The win now is weaving those discoveries into a sustainable lifestyle.";
+  // 12. Strategy -> Execute
+  if(s25.clarity && s26.ambition) return "You know the target. 2026 is the year to trust your direction and apply maximum momentum.";
+  // 13. Ambition -> Stability
+  if(s25.ambition && s26.stability) return "You need to lock in your gains. 2026 is less about the next climb, and more about securing your current height.";
+  // 14. Connection -> Growth
+  if(s25.connection && s26.growth) return "Your relationships provide the safe space you need to grow. Use that support system to push into new skills.";
+  // 15. Growth -> Clarity
+  if(s25.growth && s26.clarity) return "You’ve gathered many new inputs. Now, the key is filtering that knowledge into one sharp, actionable direction.";
+  // 16. Recovery -> Ambition
+  if(s25.recovery && s26.ambition) return "Your energy is back. 2026 is the year to test the strength of your refreshed system with a specific goal.";
+  // 17. Burnout -> Adventure
+  if(s25.burnout && s26.adventure) return "Escape is possible, but it must be intentional. Your adventure should prioritize fun over performance or destinations.";
+  // 18. Adventure -> Growth
+  if(s25.adventure && s26.growth) return "You've gathered unique experiences. The win now is translating that novelty into sustained personal evolution.";
+  // 19. Clarity -> Stability
+  if(s25.clarity && s26.stability) return "You have the map. The focus now is on building the reliable, consistent routine that makes the journey automatic.";
+  // 20. Stability -> Growth
+  if(s25.stability && s26.growth) return "Your secure base is ready. Use that predictable foundation as a launchpad for deep, focused personal development.";
+
+  // Default/Catch-all
+  return "You’re moving from “getting through it” to “living like yourself,” and that shift matters.";
+}
+
+function comboInsight(cards, profile){
+  const past = cardAxis(cards[0]);
+  const now  = cardAxis(cards[1]);
+  const fut  = cardAxis(cards[2]);
+  const g = profile.goal;
+
+  const s26 = keywordSignals(profile.hopeWords);
+  const moves = [];
+  const add = (en, zh)=>moves.push({en, zh});
+
+// future-led guidance (most differentiating)
+  if(fut === "alignment"){
+    add(
+      `2026 wants clean alignment: pick fewer things, but pick them on purpose. Filter all decisions through your top goal for ${cap(g)}.`,
+      `2026 更强调“精准对齐”：少做点，但确保每件都带着明确目标。所有决定都要先经过 ${cap(g)} 这个最高目标的筛选。` 
+    );
+  }
+  if(fut === "rhythm"){
+    add(
+      `Your edge is rhythm: build one weekly loop you can keep even on low-energy days. The goal isn't speed, but never stopping.`,
+      `你的优势在于“节奏感”：建立一个哪怕低能量时也能坚持下去的每周循环。目标不是速度，而是永不停止。` 
+    );
+  }
+  if(fut === "renewal"){
+    add(
+      `This is a “rebuild your baseline” year: small wins stacked calmly will beat heroic bursts. Focus on foundational habits (sleep, food, movement) first.`,
+      `这是“养底盘”的一年：平静地积累小胜利，比爆发式地猛冲更有效。优先关注你的基础习惯：睡眠、饮食和运动。`    
+    );
+  }
+  if(fut === "momentum"){
+    add(
+      `Green light year: once you choose a lane, you’ll move fast—protect focus like it’s money. Time saved by saying 'no' is your new currency.`,
+      `这是“开绿灯”的一年：一旦选定跑道就会加速。像保护金钱一样，保护你的专注力。学会拒绝可以帮你省下大量宝贵时间。` 
+    );
+  }
+  if(fut === "release"){
+    add(
+      `A reset is coming: your win is letting the outdated version of you go—fast. Don't let sunk costs keep you tied to things that no longer serve your future.`,
+      `一次蜕变正在到来：你的胜利就是“快速放下那个过时的自己”。别让沉没成本，把你绑在那些不再服务于未来的事物上。` 
+    );
+  }
+
+  // present-led “right now” move
+  if(now === "clarity"){
+    add(
+      `Right now: clarity beats hustle. Make one decision you’ve been avoiding, then block time immediately to act on it.`,
+      `当下：清晰比瞎忙更重要。去搞定一个你一直在拖延的决定，然后马上为这个行动预留时间。`
+    );
+  }
+  if(now === "agency"){
+    add(
+      `You already have tools. Stop waiting for permission and ship one concrete step. That single launch will create the momentum you need.`,
+      `资源其实都准备好了。别再等许可了，先去推进一个具体的行动。就是这“一次启动”会为你创造需要的动力。` 
+    );
+  }
+  if(now === "nurture" || now === "renewal"){
+    add(
+      `Make care practical: sleep/food/movement as defaults, not “if I have time.” Treat your physical health as the foundation for all ambition.`,
+      `把照顾自己落到实处：睡眠、饮食、运动是必选项，不是“有空再说”。把身体健康看作所有野心的基础。` 
+    );
+  }
+
+  // keyword-tuned finishing
+  if(s26.recovery){
+    add(
+      `Treat recovery like a system: schedule it, track it, and don’t negotiate with it. True rest is productive.`,
+      `把“恢复”当成一个系统来运行：排进日程、追踪进度，别跟它妥协。真正的休息，本身就是一种高效的产出。` 
+    );
+  } else if(s26.clarity){
+    add(
+      `Your power move is simplification: fewer goals, cleaner inputs, faster feedback. Eliminate one recurring task that doesn't serve your highest purpose.`,
+      `你的王牌是“做减法”：目标更少，输入更干净，反馈回路更快。删掉一个不再服务于你最高目标、又重复出现的任务。` 
+    );
+  } else {
+    add(
+      `Consistency will do the heavy lifting: tiny daily effort beats occasional intensity. Find the minimum viable effort you can sustain, and stick to it daily.`,
+      `“稳定”会替你扛大部分压力：每天一点点，比偶尔爆发更有用。找到你能持续的“最低可行努力量”，然后每天坚持。` 
+    );
+  }
+  return moves.slice(0,3);
+}
+
+
+function getQuote(cardNameEN, goal, lang) {
+    const g = goal.toLowerCase();
+    
+    // --- Quote Database ---
+    const quotes = {
+        
+        "The Fool": {
+            "money": {
+                en: "The first step toward financial freedom is simply deciding to start the journey, even without a perfect plan.",
+                zh: "通往财务自由的第一步，就是果断决定出发，即使你手中还没有完美的地图。",
+            },
+            "self-growth": {
+                en: "Don't wait for permission to be the person you're meant to be. The lesson is in the leap.",
+                zh: "不必等待别人的许可。去成为那个你注定要成为的人，答案就在你勇敢的跨越之中。",
+            },
+            "adventure": {
+                en: "Take the path that holds the most unknowns. Trust the universe, but remember to look where you step!",
+                zh: "选择那条拥有最多未知数的道路。相信宇宙，但也要记得看清脚下的每一步！",
+            },
+            "default": {
+                en: "The beginning is the most important part of the work. Leave your heavy luggage behind.",
+                zh: "开始是工作中最重要的部分。请放下沉重的行囊，轻装上阵。",
+            },
+        },
+
+        "The Magician": {
+            "career": {
+                en: "The resources you need are already within your reach. Focus your will and turn thought into manifestation.",
+                zh: "你需要的资源早已在你触手可及之处。聚焦你的意志力，将想法转化为现实的显化。",
+            },
+            "growth": {
+                en: "Don't wait for perfect inspiration; start with the tools you have. Skill is the link between desire and result.",
+                zh: "不要等待完美的灵感；利用你现有的工具开始行动。技能是欲望与结果之间的连接。",
+            },
+            "default": {
+                en: "The moment of power is now. Stop preparing and start doing—your capability is real.",
+                zh: "力量的时刻就在当下。停止准备，开始行动吧——你的能力足以实现目标。",
+            },
+        },
+
+        "The High Priestess": {
+            "clarity": {
+                en: "The answer is not in external data, but in the silence between your thoughts. Trust what you know, not what you see.",
+                zh: "答案不在外在数据中，而在于你思想之间的静默。相信你的直觉，而非你肉眼所见。",
+            },
+            "connection": {
+                en: "Seek depth over quantity. Your quiet, internal world is the magnet for genuine connection.",
+                zh: "寻求深度，而非数量。你宁静的内在世界，才是吸引真诚连结的磁石。",
+            },
+            "default": {
+                en: "Retreat into the sacred space of your own mind. Less noise, more signal.",
+                zh: "退回到你自己心灵的圣地。减少外界干扰，捕捉内心最安静的信号。",
+            },
+        },
+
+        "The Empress": {
+            "health": {
+                en: "Nourishment is not just food; it’s beauty, rest, and sensory pleasure. Build a routine that truly nurtures life.",
+                zh: "滋养不仅仅是食物；它包括美、休息和感官愉悦。建立真正滋养生命的日常习惯。",
+            },
+            "money": {
+                en: "Abundance flows when you care for yourself and your environment. Creativity is your most fertile asset.",
+                zh: "当你照顾好自己和周围环境时，丰盛就会自然流淌。创造力是你最肥沃的资产。",
+            },
+            "default": {
+                en: "Cultivate beauty and patience. Everything you tend to, including yourself, is ready to bloom.",
+                zh: "培养美感和耐心。你所照料的一切，包括你自己，都已准备好绽放。",
+            },
+        },
+
+        "The Emperor": {
+            "career": {
+                en: "Lead with strategic intention, not emotion. Establishing clear rules brings stability and respect.",
+                zh: "以战略意图而非情绪来领导。建立清晰的规则会带来稳定和尊重。",
+            },
+            "money": {
+                en: "Your financial freedom requires structure. Create a rigid budget and stick to the boundaries you set.",
+                zh: "你的财务自由需要严谨的结构。建立一个严格的预算，并坚守你设定的界限。",
+            },
+            "default": {
+                en: "The foundation of mastery is discipline. Take charge, establish order, and let your authority be calm and firm.",
+                zh: "精通的基础是纪律。掌控局面，建立秩序，让你的权威保持冷静和坚定。",
+            },
+        },
+
+        "The Hierophant": {
+            "growth": {
+                en: "Wisdom is often found in tradition. Seek formalized learning or mentorship before attempting radical change.",
+                zh: "智慧往往存在于传统之中。在尝试激进的改变之前，请寻求正式的学习或导师的指导。",
+            },
+            "connection": {
+                en: "Find common ground through shared rituals or values. True community offers a sense of belonging and guidance.",
+                zh: "通过共同的仪式或价值观寻找共同点。真正的社群能提供归属感和指引。",
+            },
+            "default": {
+                en: "Respect the system, but question its origin. Honor tradition while finding your own ethical truth within it.",
+                zh: "尊重体制，但质疑其起源。在尊重传统的同时，在其中找到你自己的道德真理。",
+            },
+        },
+
+        "The Lovers": {
+            "love": {
+                en: "The deepest bond is built on shared values. Choose what honors your truth, even if it means saying no to convenience.",
+                zh: "最深厚的连结是建立在共同价值观之上的。选择忠于你的真实，即使这意味着放弃便利。",
+            },
+            "career": {
+                en: "Align your work with your deepest convictions. If you face a choice, let your ethics be the deciding factor.",
+                zh: "让你的工作与你最深层的信念对齐。如果你面临选择，让你的道德伦理成为决定性因素。",
+            },
+            "default": {
+                en: "Trust your discipline. The path is clear and your willpower is enough to achieve the impossible.",
+                zh: "相信你的自律。道路很清晰，你的意志力足以实现看似不可能的目标。",
+            },
+        },
+
+        "The Chariot": {
+            "ambition": {
+                en: "Focused progress requires iron-clad boundaries. Use your discipline to accelerate your freedom, not restrict it.",
+                zh: "聚焦的进步需要钢铁般的界限。用你的自律来加速你的自由，而不是限制它。",
+            },
+            "adventure": {
+                en: "It’s time to move. Committing to a clear destination turns wanderlust into purpose.",
+                zh: "是时候行动了。对一个明确目的地的承诺，将你的漫游欲望转化为目标。",
+            },
+            "default": {
+                en: "Trust your discipline. The path is clear and your willpower is enough to achieve the impossible.",
+                zh: "相信你的自律。道路很清晰，你的意志力足以实现看似不可能的目标。",
+            },
+        },
+        
+        "Strength": {
+            "health": {
+                en: "True wellness comes from gentle consistency, not aggressive force. Treat your body with patience and kindness.",
+                zh: "真正的健康来自于温和的持续性，而非激进的强迫。请用耐心和善良对待你的身体。",
+            },
+            "growth": {
+                en: "Face your greatest fear not with a roar, but with a quiet, unshakeable calm. Compassion is the highest form of power.",
+                zh: "面对你最大的恐惧，不是靠咆哮，而是靠一种平静、坚不可摧的沉着。慈悲是力量的最高形式。",
+            },
+            "default": {
+                en: "Your greatest power is not found in controlling others, but in mastering yourself through kindness.",
+                zh: "你最大的力量不在于控制他人，而在于通过善良来驾驭你自己。",
+            },
+        },
+
+        "The Hermit": {
+            "clarity": {
+                en: "Step away from the noise. The clarity you seek is found only in the quiet of your own counsel.",
+                zh: "远离喧嚣。你所寻求的清晰洞察力，只能在你内心的安静独处中找到。",
+            },
+            "growth": {
+                en: "True wisdom is not taught, but realized through deep reflection. Turn inward to evolve outward.",
+                zh: "真正的智慧不是教出来的，而是通过深度内省而实现的。向内转，才能向外进化。",
+            },
+            "default": {
+                en: "Retreat is not weakness; it is a necessary strategy. Use this solitude to refine your next move.",
+                zh: "退隐并非软弱；它是一种必要的策略。利用这段独处来完善你的下一步行动。",
+            },
+        },
+
+        "Wheel of Fortune": {
+            "money": {
+                en: "A financial cycle is concluding. Be flexible and ready to seize the opportunity that arrives with the turning of the wheel.",
+                zh: "一个财务周期即将结束。保持灵活，并准备好抓住命运之轮转动时带来的机会。",
+            },
+            "growth": {
+                en: "Luck favors the prepared mind. Adapt quickly to the current shift and recognize the opportunity in the change.",
+                zh: "运气偏爱有准备的头脑。迅速适应当前的转变，并识别变化中的机遇。",
+            },
+            "default": {
+                en: "Change is the only constant. Release your grip on the past and trust the cycle is moving in your favor.",
+                zh: "变化是唯一的永恒。放下对过去的执着，相信周期正朝着有利于你的方向转动。",
+            },
+        },
+
+        "Justice": {
+            "connection": {
+                en: "Your relationship success hinges on fair exchange. Set clean boundaries and honor your own value.",
+                zh: "关系的成功取决于公平的交换。划清界限，并真诚地尊重你自身的价值。",
+            },
+            "career": {
+                en: "Align your work with your integrity. You gain power not through compromise, but through conviction.",
+                zh: "让你的工作与你的正直相一致。你通过信念获得力量，而非妥协。",
+            },
+            "default": {
+                en: "What you reinforce becomes real. Be meticulously fair to yourself first, then to others.",
+                zh: "你所强化的东西会成为现实。请先对你自己公正，然后才是对待他人。",
+            },
+        },
+
+        "The Hanged Man": {
+            "clarity": {
+                en: "Clarity requires a pause. Stop pushing forward and embrace a moment of suspended action to see the truth.",
+                zh: "清晰需要暂停。停止向前推进，拥抱这段悬浮的时刻，你才能看清真相。",
+            },
+            "growth": {
+                en: "The greatest growth comes from choosing to see the world from an entirely inverted perspective.",
+                zh: "最大的成长来自于选择以一个完全颠倒的视角来看待这个世界。",
+            },
+            "default": {
+                en: "Release your attachment to the way things 'should' be. True power is found in surrender, not control.",
+                zh: "放下你对事物“应该如何”的执着。真正的力量在于臣服，而非控制。",
+            },
+        },
+
+        "Death": {
+            "connection": {
+                en: "You cannot carry old baggage into new relationships. Release the past, and make space for genuine connection.",
+                zh: "你无法带着旧包袱进入新的关系。放下过去，才能为真诚的连结腾出空间。",
+            },
+            "ambition": {
+                en: "For powerful progress, you must eliminate one commitment that no longer serves your true ambition.",
+                zh: "要想实现强大的进步，你必须果断终止一个不再服务于你真正野心的承诺。",
+            },
+            "default": {
+                en: "The ending is not failure, but necessary change. Embrace the space created by your goodbyes.",
+                zh: "结束并非失败，而是必然的改变。拥抱你勇敢告别后所创造出的巨大空间。",
+            },
+        },
+
+        "Temperance": {
+            "health": {
+                en: "Rhythm is your greatest medicine. Seek balance not through drastic change, but through steady, small adjustments.",
+                zh: "节奏是你最好的药物。通过稳定、微小的修正来寻求平衡，而非巨大的改变。",
+            },
+            "growth": {
+                en: "To evolve without burnout, learn to blend disparate ideas. The power is in synthesis, not acceleration.",
+                zh: "若想避免精疲力尽而持续进化，请学会融合不同的想法。力量在于综合，而非加速。",
+            },
+            "default": {
+                en: "There is no rush. Find the perfect flow state between too much and too little.",
+                zh: "无需着急。在“太多”和“太少”之间，找到那个完美的流动状态。",
+            },
+        },
+
+        "The Devil": {
+            "money": {
+                en: "Identify where your financial decisions are driven by fear or materialism, not true need. You hold the key to freedom.",
+                zh: "认清你的财务决策是受恐惧或物质欲望驱动，而非真实需求。挣脱的钥匙就在你自己手中。",
+            },
+            "connection": {
+                en: "Break the cycle of codependency or toxic attachment. Freedom is an act of self-respect.",
+                zh: "打破相互依赖或有毒依恋的循环。自由是一种自我尊重的行为。",
+            },
+            "default": {
+                en: "Your habits are your chains. Today is the day to name the obsession and take the first step toward self-liberation.",
+                zh: "你的习惯就是你的枷锁。今天，请说出那困扰你的执念，并迈出自我解放的第一步。",
+            },
+        },
+
+        "The Tower": {
+            "stability": {
+                en: "The illusion of safety is shattering. Though chaotic, this upheaval is purifying and necessary for rebuilding on solid ground.",
+                zh: "安全的幻觉正在破碎。尽管混乱，这次剧变是净化性的，对于在坚实的基础上重建至关重要。",
+            },
+            "growth": {
+                en: "Radical clarity follows radical destruction. What falls now was destined to collapse. Embrace the space it creates.",
+                zh: "彻底的清晰度伴随着彻底的摧毁。现在倒塌的结构是注定要崩溃的。拥抱它所创造的空间。",
+            },
+            "default": {
+                en: "The collapse is not punishment, but liberation. Let go and let the truth be your guide.",
+                zh: "崩塌并非惩罚，而是解放。放手吧，让真相成为你的指引。",
+            },
+        },
+
+        "The Star": {
+            "love": {
+                en: "The greatest discovery is that you don't have to choose between finding yourself and finding love. Both are possible now.",
+                zh: "最大的领悟是：你无需在“找到自我”和“寻找爱”之间做选择。此刻，两者皆可实现。",
+            },
+            "health": {
+                en: "Healing is not a one-time event, but a system of small, hopeful habits you build daily.",
+                zh: "疗愈不是一次性事件，而是你每日建立起来的一套充满希望的小习惯系统。",
+            },
+            "default": {
+                en: "Your faith in the future is your best asset. Tend to your garden; the seeds are good.",
+                zh: "你对未来的信念，是你最宝贵的资产。照看好你的内在花园；种子是好的。",
+            },
+        },
+
+        "The Moon": {
+            "clarity": {
+                en: "Logic is misleading right now. Trust the uneasy feeling in your gut—your intuition is seeing through the illusion.",
+                zh: "逻辑此刻会产生误导。相信你内在不安的直觉——它正在穿透眼前的幻象。",
+            },
+            "self-growth": {
+                en: "Do not fear the darkness or the unknown parts of yourself. Your shadow holds untapped creative power.",
+                zh: "不要害怕黑暗或未知的自我。你的阴影中蕴藏着未被开发出的巨大创造力。",
+            },
+            "default": {
+                en: "The path is unclear because you are meant to navigate by instinct. Wait for the fog to lift before making major moves.",
+                zh: "道路之所以模糊，是因为你需要靠本能来导航。在迷雾消散之前，请勿做出重大决策。",
+            },
+        },
+
+        "The Sun": {
+            "love": {
+                en: "You are the light you've been waiting for. Authentic joy is irresistible—let it shine without apology.",
+                zh: "你就是你一直在等待的光。真正的喜悦是无法抗拒的——请毫无保留地闪耀吧。",
+            },
+            "ambition": {
+                en: "Clarity beats hustle. Commit to one clear goal and proceed with absolute, joyful confidence.",
+                zh: "清晰胜过忙碌。确定一个明确目标，以绝对的、充满喜悦的自信向前推进。",
+            },
+            "default": {
+                en: "True confidence comes from being seen exactly as you are. Stop hiding your innate warmth.",
+                zh: "真正的自信源于被如实地看见。停止隐藏你与生俱来的光芒和温暖。",
+            },
+        },
+
+        "Judgement": {
+            "career": {
+                en: "You are being called to a higher purpose in your work. Stop comparing yourself and start answering the call that only you hear.",
+                zh: "你的工作正被召唤到一个更高的使命。停止与他人比较，开始回应只有你自己能听到的召唤。",
+            },
+            "self-growth": {
+                en: "Forgive yourself for the past. True self-acceptance is the launchpad for your next great awakening.",
+                zh: "宽恕过去的自己。真正的自我接纳，是你下一个伟大觉醒的启动平台。",
+            },
+            "default": {
+                en: "A spiritual or personal reckoning is here. The final verdict on your life is only given by your own conscience.",
+                zh: "一次精神或个人的清算已经到来。对你人生的最终裁决，只能由你自己的良知给出。",
+            },
+        },
+
+        "The World": {
+            "career": {
+                en: "You have completed a major cycle of achievement. Now, integrate the lessons learned and prepare to expand your influence globally.",
+                zh: "你已经完成了一个主要的成就周期。现在，整合所学的经验教训，并准备扩大你的影响范围。",
+            },
+            "growth": {
+                en: "Completion is not the end, but the earned right to level up. You have the skills to move to the next great stage.",
+                zh: "圆满不是终点，而是升级的权利。你已具备技能迈向下一个伟大的阶段。",
+            },
+            "default": {
+                en: "The world is yours. Celebrate your victory, recognize the wholeness of your journey, and feel utterly fulfilled.",
+                zh: "世界是你的。庆祝你的胜利，认可你旅程的完整性，并感受彻底的圆满。",
+            },
+        },
+    };
+
+    // --- Quote Selection Logic ---
+    const cardQuotes = quotes[cardNameEN]; 
+    if (!cardQuotes) {
+        // Fallback for missing card or error (uses a general message)
+        const fallback = lang === "zh" ? "年度指引：你的核心优势正在浮现，现在是时候专注于你的主目标了。" : "Annual Guidance: Your core advantages are emerging, now is the time to focus on your top goal.";
+        return fallback;
+    }
+    
+    const quote = cardQuotes[g] || cardQuotes["default"];
+
+    return lang === "zh" ? quote.zh : quote.en;
+}
+
+
+function buildReading(profile, cards){
+    const who = profile.name ? profile.name : (LANG==="zh" ? "你" : "you");
+    const zf = zodiacFlavor(profile.zodiac);
+    const zzh = zodiacNameZH(profile.zodiac);
+    const mp = microProfile(profile);
+    const moves = comboInsight(cards, profile);
+
+    const idLineEN = `You: ${who} • Age ${profile.age} • ${cap(profile.zodiac)}${zzh?` (${zzh})`:``}${profile.mbti?` • ${profile.mbti.toUpperCase()}`:""} • Goal: ${cap(profile.goal)}`;
+    const idLineZH = `你：${who}｜${profile.age}岁｜${cap(profile.zodiac)}（${zzh}）${profile.mbti?`｜${profile.mbti.toUpperCase()}`:""}｜主目标：${cap(profile.goal)}`;
+
+    const cardLineEN = `Spread: ${cards.map(c=>c.nameEN).join(" → ")}.`;
+    const cardLineZH = `牌阵：${cards.map(c=>c.nameZH).join(" → ")}。`;
+
+    const zLineEN = `Constellation vibe: ${cap(profile.zodiac)} leans toward ${zf.en}.`;
+    const zLineZH = `星座气质：${cap(profile.zodiac)} 更偏「${zf.zh}」。`;
+
+    const futureCardNameEN = cards[2].nameEN;
+    const futureCardNameZH = cards[2].nameZH;
+    const goal = profile.goal;
+    const personalizedQuote = getQuote(futureCardNameEN, goal, LANG);
+
+    const oneLinerEN = `Your Guidance (Card of 2026: ${futureCardNameEN}): ${personalizedQuote}`;
+    const oneLinerZH = `26 年指引（关键牌：${futureCardNameZH}）：${personalizedQuote}`;
+
+    const goalLineEN = `Main quest lens: ${goalLens(profile.goal)}.`;
+    const goalLineZH = `主线视角：${goalLens(profile.goal)}。`;
+
+    return {
+        idLineEN, idLineZH,
+        cardLineEN, cardLineZH,
+        zLineEN, zLineZH,
+        microEN: (LANG==="zh" ? "" : mp),
+        microZH: (LANG==="zh" ? mp : ""),
+        goalLineEN, goalLineZH,
+        moves,
+        oneLinerEN,
+        oneLinerZH
+    };
+}
+
+function renderReading(reading){
+  const mk = (title, html) => `
+    <div class="section">
+      <div class="secTitle">${title}</div>
+      <div class="p">${html}</div>
+    </div>
+  `;
+
+  const idLine = (LANG==="zh") ? reading.idLineZH : reading.idLineEN;
+  const cardLine = (LANG==="zh") ? reading.cardLineZH : reading.cardLineEN;
+  const zLine = (LANG==="zh") ? reading.zLineZH : reading.zLineEN;
+  const micro = (LANG==="zh") ? reading.microZH : reading.microEN;
+  const goalLine = (LANG==="zh") ? reading.goalLineZH : reading.goalLineEN;
+
+  const movesHtml = `
+    <ul>
+      ${reading.moves.map(m => `<li>${LANG==="zh" ? m.zh : m.en}</li>`).join("")}
+    </ul>
+  `;
+
+  readingContent.innerHTML = `
+    ${mk(LANG==="zh" ? "个人画像" : "Who this reading is for", `${idLine}<br/>${cardLine}`)}
+    ${mk(LANG==="zh" ? "核心解读" : "Your current vibe", `${micro}<br/>${zLine}<br/>${goalLine}`)}
+    ${mk(LANG==="zh" ? "小建议" : "Next steps for you", movesHtml)}
+  `;
+
+  document.getElementById("disclaimer").textContent = t[LANG].disclaimer;
+}
+
+/* =========================================================
+   RENDER CARDS (flip) + spacing not cut
+   ========================================================= */
+
+function renderCards(cards){
+  cardsEl.innerHTML = "";
+  const labelsEN = ["Past Year (2025)", "Present (Right Now)", "Upcoming Year (2026)"];
+  const labelsZH = ["回顾过去一年", "当下你的立足点", "展望2026"];
+
+cards.forEach((c, i)=>{
+    const outer = document.createElement("div");
+    outer.className = "flip";
+    outer.innerHTML = `
+      <div class="flipInner">
+        <div class="face back"><div class="pattern"></div></div>
+        <div class="face front">
+          <div class="frontTop">
+            <div class="label-group">
+              <div class="time-label">${LANG==="zh" ? labelsZH[i] : labelsEN[i]}</div>
+              <div class="vibe-label"><strong>${LANG==="zh" ? c.vibeZH : c.vibeEN}</strong></div>
+            </div>
+          </div>
+          <div class="art"><img alt="tarot" src="${c.img}"/></div>
+          <div class="frontBody">
+            <div class="name">${LANG==="zh" ? c.nameZH : c.nameEN}</div>
+            <p class="meaning">${LANG==="zh" ? c.baseZH : c.baseEN}</p>
+          </div>
+        </div>
+      </div>
+    `;
+    cardsEl.appendChild(outer);
+    setTimeout(()=>outer.classList.add("revealed"), 280 + i*220);
+  });
+}
+
+/* =========================================================
+   CHIPS (includes zodiac bilingual)
+   ========================================================= */
+function setChips(profile, cards){
+  chipsEl.innerHTML = "";
+  const { selfWords, hopeWords, goal, mbti, zodiac, age } = profile;
+  const zzh = zodiacNameZH(zodiac);
+
+  const items = [];
+  selfWords.forEach(w => items.push(`${w}·2025`));
+  hopeWords.forEach(w => items.push(`${w}·2026`));
+
+  items.push(LANG==="zh" ? `目标·${cap(goal)}` : `Goal·${cap(goal)}`);
+  items.push(LANG==="zh" ? `年龄·${age}` : `Age·${age}`);
+  items.push(LANG==="zh" ? `星座·${cap(zodiac)}（${zzh}）` : `Zodiac·${cap(zodiac)} (${zzh})`);
+  if(mbti) items.push(`MBTI·${mbti.toUpperCase().trim()}`);
+
+  cards.forEach(c => items.push(LANG==="zh" ? c.nameZH : c.nameEN));
+
+  items.slice(0, 18).forEach(txt=>{
+    const chip = document.createElement("div");
+    chip.className="chip";
+    chip.textContent = txt;
+    chipsEl.appendChild(chip);
+  });
+}
+
+/* =========================================================
+   LOCK 2025 words after first generate
+   ========================================================= */
+function lockSelfWords(lock){
+  STATE.lockedSelf = !!lock;
+  selfInput.disabled = STATE.lockedSelf;
+  if(STATE.lockedSelf){
+    selfInput.value = (STATE.profile?.selfWords || []).join(", ");
+    showToast(t[LANG].locked);
+  }
+}
+function enforceSelfLock(){
+  if(!STATE.lockedSelf) return;
+  const locked = (STATE.profile?.selfWords || []).join(", ");
+  if(selfInput.value !== locked) selfInput.value = locked;
+}
+["input","paste","keydown","keyup","change"].forEach(evt=>{
+  selfInput.addEventListener(evt, enforceSelfLock);
+});
+
+/* =========================================================
+   SHARE CARD TEXT (uses reading one-liner, not hard-coded)
+   ========================================================= */
+function shareText(profile, cards, reading){
+  const goalCfg = goalDecor(profile.goal); 
+  const gLabel = LANG==="zh" ? goalCfg.labelZH : goalCfg.labelEN;
+
+  const who = profile.name ? profile.name : (LANG==="zh" ? "你" : "You");
+  const mb = (profile.mbti||"").toUpperCase().trim() || (LANG==="zh" ? "无" : "—");
+  const zzh = zodiacNameZH(profile.zodiac);
+  const z = `${cap(profile.zodiac)}${zzh? (LANG==="zh" ? `（${zzh}）` : ` (${zzh})`) : ""}`;
+  const cNames = cards.map(c => LANG==="zh" ? c.nameZH : c.nameEN).join(" · ");
+  const oneLiner = (LANG==="zh") ? reading.oneLinerZH : reading.oneLinerEN;
+
+  if(LANG==="zh"){
+    return [
+      `姓名：${who}  ｜ 年龄：${profile.age}  ｜ 星座：${z}  ｜ MBTI：${mb}`,
+      "", 
+      `—`, 
+      `2025 状态关键词：${profile.selfWords.join("、")}`, 
+      `2026 内在期待：${profile.hopeWords.join("、")}`, 
+      `2026 主题：${gLabel}`, 
+      `—`, 
+      `核心牌组：${cNames}`, 
+      `${oneLiner}`
+    ].join("\n");
+  }
+
+  return [
+    `Name: ${who}  | Age: ${profile.age}  | Zodiac: ${z}  | MBTI: ${mb}`,
+      "", 
+    `—`, 
+    `2025 State Keywords: ${profile.selfWords.join(", ")}`, 
+    `2026 Inner Hopes: ${profile.hopeWords.join(", ")}`,
+    `Top 2026 Theme: ${gLabel}`,
+    `—`,
+    `Core Cards: ${cNames}`, 
+    `${oneLiner}`
+  ].join("\n");
+}
+
+
+/* =========================================================
+   TREE THEME (based on cards + hope words) + GOAL ORNAMENTS
+   ========================================================= */
+function treeTheme(cards, hopeWords){
+  const names = cards.map(c => c.nameEN);
+  const hope = hopeWords.map(w => String(w).toLowerCase().trim());
+  const future = names[2] || "";
+
+  let color = "green";
+  if(["The Sun","The World","The Lovers"].some(n => names.includes(n))) color = "red";
+  if(["The Star","Temperance","The High Priestess"].some(n => names.includes(n))) color = "blue";
+  if(["Death","The Hermit"].some(n => names.includes(n))) color = "deep";
+
+  const vibrantWords = ["joy","confidence","excited","energy","bold","success","win","happy","love"];
+  const softWords = ["rest","heal","balance","calm","peace","self-care","health","stability","steady","sleep"];
+  let vibe = "soft";
+  if(hope.some(w => vibrantWords.includes(w))) vibe = "vibrant";
+  if(hope.some(w => softWords.includes(w)) && vibe !== "vibrant") vibe = "soft";
+
+  if(future === "The Sun"){ color="red"; vibe="vibrant"; }
+  if(future === "Temperance"){ color="blue"; }
+  if(future === "The Star"){ color="blue"; }
+  if(future === "The Hermit"){ color="deep"; vibe="soft"; }
+
+  return { color, vibe };
+}
+
+function applyTreeTheme(theme){
+  const root = document.documentElement.style;
+
+  if(theme.color === "red"){
+    if(theme.vibe === "vibrant"){
+      // Vibrant Red
+      root.setProperty("--treeA", "#f97316"); 
+      root.setProperty("--treeB", "#ea580c");
+      root.setProperty("--treeGlow", "rgba(234, 88, 12, .45)");
+      root.setProperty("--treeStar", "rgba(255, 255, 180, .95)"); 
+      root.setProperty("--treeStarGlow", "rgba(255, 255, 180, .70)");
+    } else {
+      // Soft Red
+      root.setProperty("--treeA", "#fb7185"); 
+      root.setProperty("--treeB", "#ef4444");
+      root.setProperty("--treeGlow", "rgba(239, 68, 68, .28)");
+      root.setProperty("--treeStar", "rgba(255, 214, 140, .95)");
+      root.setProperty("--treeStarGlow", "rgba(255, 214, 140, .55)");
+    }
+
+  } else if(theme.color === "blue"){
+    if(theme.vibe === "vibrant"){
+      // Vibrant Blue
+      root.setProperty("--treeA", "#06b6d4");
+      root.setProperty("--treeB", "#0891b2");
+      root.setProperty("--treeGlow", "rgba(6, 182, 212, .40)");
+      root.setProperty("--treeStar", "rgba(255, 244, 200, .95)");
+      root.setProperty("--treeStarGlow", "rgba(255, 244, 200, .60)");
+    } else {
+      // Soft Blue
+      root.setProperty("--treeA", "#60a5fa");
+      root.setProperty("--treeB", "#3b82f6");
+      root.setProperty("--treeGlow", "rgba(96, 165, 250, .25)");
+      root.setProperty("--treeStar", "rgba(255, 244, 200, .95)");
+      root.setProperty("--treeStarGlow", "rgba(255, 244, 200, .50)");
+    }
+
+  } else if(theme.color === "deep"){
+    // Deep themes
+    root.setProperty("--treeA", "#1f2937");
+    root.setProperty("--treeB", "#0f766e");
+    root.setProperty("--treeGlow", theme.vibe === "vibrant" ? "rgba(15, 118, 110, .30)" : "rgba(15, 118, 110, .18)");
+    root.setProperty("--treeStar", "rgba(216, 220, 255, .92)");
+    root.setProperty("--treeStarGlow", "rgba(216, 220, 255, .45)");
+
+  } else { // Default Green
+    if(theme.vibe === "vibrant"){
+      // Vibrant Green 
+      root.setProperty("--treeA", "#4ade80"); 
+      root.setProperty("--treeB", "#10b981"); 
+      root.setProperty("--treeGlow", "rgba(16, 185, 129, .40)");
+      root.setProperty("--treeStar", "rgba(255, 214, 140, .95)");
+      root.setProperty("--treeStarGlow", "rgba(255, 214, 140, .60)");
+    } else {
+      // Soft Green
+      root.setProperty("--treeA", "#34d399"); 
+      root.setProperty("--treeB", "#059669"); 
+      root.setProperty("--treeGlow", "rgba(16, 185, 129, .20)");
+      root.setProperty("--treeStar", "rgba(255, 214, 140, .95)");
+      root.setProperty("--treeStarGlow", "rgba(255, 214, 140, .50)");
+    }
+  }
+}
+
+function goalDecor(goal){
+  const map = {
+    love:  { icons:["💛","💞","💘","🌟","🥂","💖"], labelEN:"Love", labelZH:"爱与关系" }, 
+    family:{ icons:["🏠","🫶","🎁","✨","🧸","🫂"], labelEN:"Family", labelZH:"家庭与归属" }, 
+    health:{ icons:["🍃","💪","🧘","✨","🔋","💧"], labelEN:"Health", labelZH:"身心健康" }, 
+    career:{ icons:["⭐","📈","🧠","✨","🎯","💼"], labelEN:"Career", labelZH:"事业发展" }, 
+    money:{ icons:["💰","🪙","📊","✨","🏦","💎"], labelEN:"Money", labelZH:"财务规划" }, 
+    "self-growth":{ icons:["🌱","📚","🧩","✨","💡","🦋"], labelEN:"Self-growth", labelZH:"自我蜕变" }, 
+    adventure:{ icons:["🧭","✈️","🌙","✨","🗺️","🚀"], labelEN:"Adventure", labelZH:"冒险探索" }, 
+    creativity:{ icons:["🎨","🖌️","🎼","✨","🎭","💭"], labelEN:"Creativity", labelZH:"灵感与创作" }
+  };
+  return map[goal] || { icons:["💫","🌟"], labelEN:"2026", labelZH:"年度展望" };
+}
+
+function renderGoalOrnaments(goal){
+  ornamentsEl.innerHTML = "";
+  const cfg = goalDecor(goal);
+
+  const pos = [
+    {x:40,  y:65,  cls:"big"},   
+    {x:115, y:80,  cls:"small"},
+    {x:25,  y:118, cls:"small"},
+    {x:125, y:125, cls:"big"},
+    {x:70,  y:150, cls:"small"},
+    {x:105, y:180, cls:"big"},
+    {x:35,  y:185, cls:"small"}, 
+  ];
+
+pos.forEach((p, i)=>{
+    const d = document.createElement("div");
+    d.className = `orn ${p.cls} glowing-orn`; 
+    d.style.left = p.x + "px";
+    d.style.top  = p.y + "px";
+    d.style.fontSize = (p.cls === "big") ? "30px" : "22px"; 
+    d.style.animationDelay = (i * 0.24) + "s";
+    d.textContent = cfg.icons[i % cfg.icons.length];
+    ornamentsEl.appendChild(d);
+  });
+  const titleEl = document.getElementById("shareTitle");
+  titleEl.textContent = (LANG==="zh")
+    ? `2026 · ${cfg.labelZH}主题`
+    : `2026 · ${cfg.labelEN} Theme`;
+}
+
+/* =========================================================
+   PROFILE + VALIDATION
+   ========================================================= */
+function gatherProfile(){
+  const age = clampAge(Number(ageInput.value));
+  const selfWords = parseWords(selfInput.value);
+  const hopeWords = parseWords(hopeInput.value);
+
+  return {
+    name: normalizeWords(nameInput.value),
+    age,
+    mbti: normalizeWords(mbtiInput.value),
+    zodiac: zodiacSelect.value || "",
+    selfWords,
+    hopeWords,
+    goal: goalSelect.value
+  };
+}
+
+function validateProfile(profile){
+  const L = t[LANG];
+  if(profile.age == null){ showToast(L.needAge); return false; }
+  if(!profile.zodiac){ showToast(L.needZodiac); return false; }
+  if(!validateRange(profile.selfWords) || !validateRange(profile.hopeWords)){
+    showToast(L.needWords);
+    return false;
+  }
+  return true;
+}
+
+/* =========================================================
+   ACTIONS: draw / reset / surprise / download
+   ========================================================= */
+function renderAll(){
+  const profile = STATE.profile;
+  const cards = STATE.cards;
+
+  renderCards(cards);
+  setChips(profile, cards);
+
+  const reading = buildReading(profile, cards);
+  renderReading(reading);
+
+  shareBody.textContent = shareText(profile, cards, reading);
+  shareMeta.textContent = t[LANG].shareGenerated;
+
+  STATE.theme = treeTheme(cards, profile.hopeWords);
+  applyTreeTheme(STATE.theme);
+  renderGoalOrnaments(profile.goal);
+
+  spreadTag.textContent = (LANG==="zh" ? "已生成" : "Generated");
+}
+
+function doDraw(){
+  const profile = gatherProfile();
+  if(!validateProfile(profile)) return;
+
+  if(!STATE.drawn){
+    STATE.profile = profile;
+    lockSelfWords(true);
+  } else {
+    profile.selfWords = (STATE.profile?.selfWords || profile.selfWords);
+    STATE.profile = profile;
+  }
+
+  STATE.cards = pick3();
+  STATE.drawn = true;
+
+  statusPill.textContent = t[LANG].generated;
+  renderAll();
+  showToast(t[LANG].generated);
+}
+
+function doReset(){
+  STATE.drawn = false;
+  STATE.cards = [];
+  STATE.profile = null;
+  STATE.lockedSelf = false;
+  selfInput.disabled = false;
+  cardsEl.innerHTML = "";
+  chipsEl.innerHTML = "";
+  readingContent.innerHTML = ""; 
+  shareBody.textContent = "";
+  ornamentsEl.innerHTML = "";
+  nameInput.value = "";
+  ageInput.value = "";
+  mbtiInput.value = "";
+  zodiacSelect.value = "none";
+  selfInput.value = "";   // Clears the "I feel..." keywords
+  hopeInput.value = "";   // Clears the "I hope for..." keywords
+  goalSelect.value = "career"; // Resets the 2026 goal selection
+  spreadTag.textContent = t[LANG].notDrawn;
+  shareMeta.textContent = t[LANG].shareReady;
+  statusPill.textContent = t[LANG].ready;
+  document.getElementById("disclaimer").textContent = "";
+
+  showToast(t[LANG].ready);
+}
+
+function doSurprise(){
+  const samples = [
+    {name:"Mina", age:"22", mbti:"", zodiac:"leo", self:"curious, social, restless", hope:"love, calm, trust", goal:"love"},
+    {name:"Jay", age:"30", mbti:"ENTP", zodiac:"virgo", self:"busy, ambitious, stressed", hope:"money, stability, focus", goal:"money"},
+    {name:"Sofia", age:"19", mbti:"ISFJ", zodiac:"cancer", self:"nurturing, overworked, seeking balance", hope:"rhythm, peace, boundaries", goal:"health"},
+    {name:"Ethan", age:"32", mbti:"INFJ", zodiac:"scorpio", self:"reflective, seeking purpose, ready for change", hope:"clarity, transformation, wisdom", goal:"self-growth"},
+    {name:"Chloe", age:"29", mbti:"ESTP", zodiac:"sagittarius", self:"adventurous, impulsive, needs structure", hope:"focus, discipline, momentum", goal:"ambition"},
+  ];
+  const s = pickFrom(samples);
+  nameInput.value = s.name;
+  ageInput.value = s.age;
+  mbtiInput.value = s.mbti;
+  zodiacSelect.value = s.zodiac;
+  selfInput.value = s.self;
+  hopeInput.value = s.hope;
+  goalSelect.value = s.goal;
+  showToast(t[LANG].ready);
+}
+
+async function doDownload(){
+  if(!STATE.drawn){
+    showToast(t[LANG].notDrawn);
+    return;
+  }
+  showToast(t[LANG].downloading);
+
+  const node = document.getElementById("shareCard");
+  try{
+    const canvas = await html2canvas(node, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true
+    });
+    const a = document.createElement("a");
+    a.download = "holiday-tarot-2026.png";
+    a.href = canvas.toDataURL("image/png");
+    a.click();
+    showToast(t[LANG].saved);
+  } catch(e){
+    console.error(e);
+    showToast(t[LANG].downloadFail);
+  }
+}
+
+
+/* =========================================================
+   EVENTS + INIT
+   ========================================================= */
+document.getElementById("drawBtn").addEventListener("click", doDraw);
+document.getElementById("resetBtn").addEventListener("click", doReset);
+document.getElementById("surpriseBtn").addEventListener("click", doSurprise);
+document.getElementById("downloadBtn").addEventListener("click", doDownload);
+document.getElementById("oracleRollButton").addEventListener("click", generateOracleResult);
+
+setLang("en");
+spreadTag.textContent = t[LANG].notDrawn;
+shareMeta.textContent = t[LANG].shareReady;
+  </script>
+</body>
+</html>
