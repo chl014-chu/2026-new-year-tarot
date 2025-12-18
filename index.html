@@ -705,20 +705,20 @@
             <div>
               <label id="lblGoal" for="goal">Most important 2026 goal</label>
               <select id="goal">
-                <option value="career">career</option>
-                <option value="love">love</option>
-                <option value="family">family</option>
-                <option value="health">health</option>
-                <option value="money">money</option>
-                <option value="self-growth">self-growth</option>
-                <option value="creativity">creativity</option>
-                <option value="adventure">adventure</option>
+                <option value="career">career（事业）</option>
+                <option value="love">love（爱情）</option>
+                <option value="family">family（家庭）</option>
+                <option value="health">health（健康）</option>
+                <option value="money">money（金钱）</option>
+                <option value="self-growth">self-growth（个人成长）</option>
+                <option value="creativity">creativity（创造力）</option>
+                <option value="adventure">adventure（历险）</option>
               </select>
             </div>
           </div>
 
           <div class="btnRow">
-            <button class="btn primary" type="button" id="drawBtn">🎴 Draw & reveal</button>
+            <button class="btn primary" type="button" id="drawBtn">🎉 Draw & reveal</button>
             <button class="btn secondary" type="button" id="surpriseBtn">🎁 Surprise</button>
             <button class="btn ghost" type="button" id="downloadBtn">🖼️ Download card</button>
             <button class="btn ghost" type="button" id="resetBtn">↩ Reset</button>
@@ -822,7 +822,7 @@ const t = {
     self: "3–5 words: you in 2025",
     hope: "3–5 words: your 2026 hopes",
     goal: "Most important 2026 goal",
-    draw: "🎴 Draw & reveal",
+    draw: "🎉 Draw & reveal",
     surprise: "🎁 Random",
     download: "🖼️ Download card",
     reset: "↩ Reset",
@@ -866,7 +866,7 @@ const t = {
     self: "3–5 个词：2025 的你",
     hope: "3–5 个词：对 2026 的期待",
     goal: "2026 最重要的目标",
-    draw: "🎴 抽牌并翻开",
+    draw: "🎉 抽牌并翻开",
     surprise: "🎁 随机示例",
     download: "🖼️ 下载图片卡",
     reset: "↩ 重置",
@@ -939,11 +939,15 @@ function normalizeWords(s){
   return (s || "").replace(/[•|/]/g, " ").replace(/\s+/g, " ").trim();
 }
 function parseWords(s){
-  const tt = normalizeWords(s);
-  if(!tt) return [];
-  const parts = tt.includes(",") ? tt.split(",") : tt.split(" ");
-  return parts.map(x=>x.trim()).filter(Boolean).slice(0,5);
+  const tt = normalizeWords(s)
+    .replace(/[，、；;]/g, ",");
+  return tt
+    .split(/[,\s]+/g)
+    .map(x => x.trim())
+    .filter(Boolean)
+    .slice(0, 5);
 }
+
 function validateRange(arr){ return arr.length >= 3 && arr.length <= 5; }
 function cap(s){ return s ? (s[0].toUpperCase() + s.slice(1)) : s; }
 function clampAge(age){
@@ -1266,13 +1270,6 @@ function pick3(){
 /* ===== zodiac + reading engine + other helpers ===== */
 /* (keeping your original functions; omitted here for brevity in this message would break copy/paste) */
 
-/* =========================================================
-   IMPORTANT:
-   Paste the REST of your original JS here unchanged
-   (from zodiacFlavor... all the way down),
-   EXCEPT keep this one line in renderAll:
-   shareMeta.textContent = t[LANG].shareGenerated;
-   ========================================================= */
 function zodiacFlavor(z){
   const enMap = {
     aries:"bold starts", taurus:"steady building", gemini:"curiosity & learning",
@@ -1303,183 +1300,327 @@ function zodiacNameZH(z){
    - DOES NOT repeat base meaning (already on card)
    ========================================================= */
 function cardAxis(card){
+  if (!card || !card.nameEN) return "focus"; // guard against missing cards
   const m = {
-    "Justice":"alignment",
-    "Temperance":"rhythm",
-    "The Sun":"clarity",
-    "The Star":"renewal",
-    "The Empress":"nurture",
-    "The Magician":"agency",
-    "Strength":"courage",
-    "The Lovers":"values",
-    "The Chariot":"momentum",
-    "Death":"release",
-    "The Hermit":"reflection",
-    "Wheel of Fortune":"flex",
-    "The World":"completion",
-    "The Fool":"start"
+    "Justice": "alignment",
+    "Temperance": "rhythm",
+    "The Sun": "clarity",
+    "The Star": "renewal",
+    "The Empress": "nurture",
+    "The Magician": "agency",
+    "Strength": "courage",
+    "The Lovers": "values",
+    "The Chariot": "momentum",
+    "Death": "release",
+    "The Hermit": "reflection",
+    "Wheel of Fortune": "flex",
+    "The World": "completion",
+    "The Fool": "start",
+    "The Hanged Man": "shift",
+    "The Devil": "restriction",
+    "The Moon": "intuition",
+    "Judgement": "reckoning"
   };
+
   return m[card.nameEN] || "focus";
 }
 
-function keywordSignals(words){
-  const w = words.map(x=>String(x).toLowerCase().trim());
-  const has = (...k)=>k.some(x=>w.includes(x));
+
+function keywordSignals(words) {
+  const normalize = (s) =>
+    String(s ?? "")
+      .toLowerCase()
+      .replace(/[’]/g, "'")
+      .trim();
+
+  const w = (Array.isArray(words) ? words : [words]).map(normalize).filter(Boolean);
+  const text = w.join(" ");
+
+  const has = (...keys) => {
+    const flat = keys.flat().map(normalize).filter(Boolean);
+    return flat.some((k) => w.includes(k) || text.includes(k));
+  };
   
   return {
+    recovery: has(
+      // EN: Focus on nervous system regulation and healing
+      "rest","heal","healing","self-care","self care","health","wellbeing","well-being",
+      "balance","calm","peace","sleep","nap","restore","slow","steady","wellness",
+      "recharge","quiet","renewal","unwind","detox","mindfulness","patience","ease",
+      "reset","recovery","gentle","soft","pause","breathe","therapy","counseling",
+      "retreat","chill","zen","burnout recovery","mending",
+      // 中文: 强调回血、修复与松弛
+      "休息","睡觉","补觉","早睡","修复","恢复","疗愈","治愈","养生","调养","养精蓄锐",
+      "自我照顾","自我关怀","身心健康","健康","平衡","放松","松弛","松弛感","慢下来",
+      "安静","平静","安心","冥想","正念","深呼吸","充电","重启","清空","排毒","回血",
+      "避世","修整","不卷了","身体健康"
+    ),
 
-    recovery: has("rest","heal","self-care","health","balance","calm","peace","sleep", 
-                   "restore", "slow", "steady", "wellness", "recharge", "quiet", "renewal", 
-                   "unwind", "detox", "mindfulness", "patience", "ease"),
-    
-    clarity: has("clarity","focus","simple","direction","decisive","clean", 
-                   "structure", "organize", "clear", "intentional", "plan", "boundaries", "purpose",
-                   "vision", "truth", "insight", "strategy", "alignment", "goal"),
+    clarity: has(
+      // EN: Focus on reduction and decision making
+      "clarity","focus","simple","simplicity","direction","decisive","decisiveness","clean",
+      "structure","organize","organized","clear","intentional","plan","planning",
+      "boundaries","boundary","purpose","vision","truth","insight","strategy","alignment",
+      "goal","goals","priorities","prioritization","roadmap","scope","signal","signal-to-noise",
+      "essentialism","minimalism","declutter","cut the noise","filter",
+      // 中文: 强调理清逻辑、断舍离与通透
+      "清晰","明确","方向","目标","计划","规划","边界","界限","结构","整理","理清","梳理",
+      "聚焦","专注","取舍","优先级","对齐","一致","路线图","复盘","真相","洞察","策略",
+      "极简","断舍离","干净","清爽","不内耗","想通了","通透","核心","重点"
+    ),
 
-    ambition: has("career","success","promotion","money","ambitious","driven","grind","win",
-                    "income", "hustle", "achieve", "visibility", "progress", "goals", "wealth", "fame",
-                    "authority", "leadership", "status", "power", "business", "launch"),
+    ambition: has(
+      // EN: Focus on high-level career achievements and wealth
+      "career","success","promotion","money","ambitious","driven","grind","win","income",
+      "hustle","achieve","achievement","visibility","progress","goals","wealth","fame",
+      "authority","leadership","status","power","business","launch","ship","build",
+      "revenue","profit","monetize","exit","unicorn","first tier","impact","legacy",
+      // 中文: 强调世俗成功、搞钱与向上社交
+      "事业","升职","晋升","加薪","赚钱","搞钱","野心","上进","拼","冲","卷","奋斗",
+      "成功","赢","赢麻了","成就","拿结果","业绩","影响力","名气","地位","权力","领导力",
+      "创业","开公司","变现","出名","搞大事","大厂","财富自由","第一梯队","暴富"
+    ),
 
-    connection: has("love","relationship","family","friends","connection",
-                     "social", "community", "belonging", "dating", "partner", "intimacy", "vulnerable",
-                     "bond", "marriage", "trust", "communication", "support", "empathy"),
+    connection: has(
+      // EN: Focus on intimacy and community
+      "love","relationship","family","friends","connection","social","community","belonging",
+      "dating","partner","intimacy","vulnerable","bond","marriage","trust","communication",
+      "support","empathy","care","together","miss you","quality time","tribe","mentorship",
+      "networking","soulmate","companionship",
+      // 中文: 强调高质量关系、共情与被爱
+      "爱","喜欢","感情","关系","恋爱","暧昧","约会","对象","伴侣","亲密","亲密关系",
+      "家人","朋友","陪伴","社交","圈子","归属感","信任","沟通","支持","共情","理解",
+      "在乎","想你","黏","黏人","安全感","高质量陪伴","脱单","表白","真心","真诚"
+    ),
 
-    growth: has("growth","learn","learning","curious","explore","improve",
-                     "skill", "knowledge", "mastery", "change", "upgrade", "better", "evolve", "new",
-                     "potential", "development", "wisdom", "evolve", "expansion"),
+    growth: has(
+      // EN: Focus on skill acquisition and internal evolution
+      "growth","learn","learning","curious","explore","improve","improvement",
+      "skill","skills","knowledge","mastery","change","upgrade","better","evolve",
+      "potential","development","wisdom","expand","expansion","iterate","iteration",
+      "practice","training","level up","re-skill","upskill","mindset","philosophy",
+      // 中文: 强调进阶、打破天花板与求知
+      "成长","学习","进步","提升","提高","精进","进阶","升级","突破","潜力","发展",
+      "探索","好奇","复盘","迭代","练习","训练","开拓","拓展","变强","变好","长见识",
+      "开悟","认知","底层逻辑","读书","学习新技能","进化"
+    ),
 
-    burnout: has("tired","burnout","overwhelmed","stressed","anxious","exhausted",
-                     "fatigue", "drained", "stuck", "frustrated", "pressure", "sad", "grief", "heavy",
-                     "crisis", "trapped", "lost", "doubt", "despair", "confusion"),
+    burnout: has(
+      // EN: Focus on depletion and state of crisis
+      "tired","burnout","overwhelmed","stressed","stress","anxious","exhausted","fatigue",
+      "drained","stuck","frustrated","pressure","sad","grief","heavy","crisis","trapped",
+      "lost","doubt","despair","confusion","mental load","can't cope","done","depleted",
+      "empty","foggy","shattered",
+      // 中文: 强调由于压力产生的负面情绪
+      "累","好累","心累","精疲力尽","倦怠","压力","焦虑","崩溃","顶不住","受不了",
+      "内耗","烦","烦躁","迷茫","卡住","陷住","低落","难受","压抑","痛苦","崩了","emo",
+      "绝望","失望","怀疑","困惑","麻了","碎了","救命","废了","提不起劲"
+    ),
 
-    adventure: has("travel", "adventure", "explore", "brave", "risk", "novelty", "fun", "excited", "thrill", 
-                     "spontaneous", "move", "journey", "change of pace", "unknown", "leap"),
+    adventure: has(
+      // EN: Focus on novelty and movement
+      "travel","adventure","explore","brave","risk","novelty","fun","excited","thrill",
+      "spontaneous","move","journey","change of pace","unknown","leap","try","new city",
+      "nomad","off-grid","bucket list","backpacking","hiking","camping",
+      // 中文: 强调地理位置或生活方式的变动
+      "旅行","旅游","冒险","探索","探险","勇敢","刺激","新鲜感","好玩","兴奋","冲动",
+      "说走就走","跳出舒适圈","换个节奏","远行","漂","浪","体验","未知","尝试","来一场",
+      "数字游民","徒步","露营","看世界","异国他乡","换个城市"
+    ),
 
-    stability: has("stable", "consistent", "secure", "safe", "home", "foundation", "base", "grounded", 
-                     "routine", "steady", "reliable", "anchor", "root", "commitment", "order")
+    stability: has(
+      // EN: Focus on predictability and long-term security
+      "stable","stability","consistent","secure","safe","home","foundation","base","grounded",
+      "routine","steady","reliable","anchor","root","commitment","order","predictable",
+      "long-term","long term","sustainable","savings","equity","protection","moat",
+      // 中文: 强调守成、扎根与可预测性
+      "稳定","安稳","踏实","安全","安全感","家","回家","归属","基础","底盘","规律",
+      "作息","可靠","稳住","扎根","长期","可持续","秩序","有序","守住","稳健",
+      "攒钱","养老","护城河","抗风险","保命","基本盘"
+    ),
+
+    executionMode: has(
+      // EN: Focus on velocity and high-frequency shipping
+      "execution","execute","implement","delivery","deliver","ship","rollout","launch",
+      "deadline","output","owner","accountability","ownership","operating cadence",
+      "sprint","action-oriented","velocity","closed loop","follow through",
+      // 中文: 强调落地、不废话与交付结果
+      "落地","执行","执行力","推进","推动","交付","按期","上线","发版","节奏","拿结果",
+      "扛事","负责","闭环","颗粒度","实干","行动派","不拖延"
+    ),
+
+    scaleMode: has(
+      // EN: Focus on systems and multiplication
+      "scale","scaling","leverage","systems","systemize","process","sop","automation",
+      "ops","operations","efficiency","repeatable","tooling","infrastructure","delegation",
+      "outsource","matrix","multiplier",
+      // 中文: 强调流程化、放大效率与杠杆
+      "规模化","扩张","放大","杠杆","系统化","流程化","标准化","sop","自动化","工具化",
+      "提效","运营","基建","外包","授权","矩阵","裂变","复刻"
+    ),
+
+    disciplineFitness: has(
+      // EN: Focus on physical optimization and daily rigor
+      "discipline","routine","consistency","habit","habits","time blocking","deep work",
+      "fitness","gym","workout","cardio","strength","run","running","steps","protein","sleep",
+      "biohacking","fasting","yoga","pilates","weights","body composition",
+      // 中文: 强调对身体和时间的绝对掌控
+      "自律","纪律","规律","坚持","打卡","不找借口","深度工作","时间管理","健身","训练",
+      "有氧","力量","跑步","增肌","减脂","蛋白","睡眠","作息","瑜伽","普拉提","断糖",
+      "戒断","自控力"
+    ),
+
+    familyTime: has(
+      // EN: Focus on caretaking and family legacy
+      "family time","family","kids","parents","home","quality time","legacy","ancestry",
+      "holidays","wedding","baby","parenting",
+      // 中文: 强调原生家庭或新生家庭的联结
+      "陪家人","家庭时间","亲子","孩子","父母","回家","陪爸妈","陪娃","陪伴","带娃",
+      "团圆","长辈","结婚","生娃","家用"
+    ),
+
+    financialIndependence: has(
+       // EN: Specifically about financial control
+       "investing","passive income","portfolio","retirement","fire","savings rate","debt free",
+       "emergency fund","financial freedom","assets","stocks",
+       // 中文: 强调财务上的掌控力
+       "理财","投资","被动收入","睡后收入","财务自由","存钱","养老金","资产配置","解债","搞钱计划"
+    )
   };
 }
 
-function goalLens(goal){
-  const en = {
-    love:"connection + honesty + emotional safety",
-    family:"support systems + boundaries + steady presence",
-    health:"energy management + consistency + recovery",
-    career:"focus + visibility + strategy + momentum",
-    money:"stability + smarter choices + long-term security",
-    "self-growth":"identity upgrades + self-trust + new patterns",
-    adventure:"bravery + novelty + saying yes to life",
-    creativity:"play + output + protecting creative time"
-  };
-  const zh = {
-    love:"深度连接 + 真诚沟通 + 情绪踏实感",
-    family:"互相支持 + 明确界限 + 稳定的爱与陪伴",
-    health:"能量管理 + 持续规律 + 高效恢复",
-    career:"专注 + 长期策略 + 执行力",
-    money:"财务稳定 + 聪明消费观 + 长期安心感",
-    "self-growth":"身份蜕变 + 相信自己 + 建立新习惯",
-    adventure:"鼓起勇气 + 拥抱新鲜感 + 对生活说“我愿意”",
-    creativity:"保持玩心 + 确保产出 + 守护你的创作时段"
-  };
-  return LANG==="zh" ? (zh[goal] || "更贴近自己的成长") : (en[goal] || "alignment and progress");
-}
-
-
-function microProfile(profile){
-  const s25 = keywordSignals(profile.selfWords);
-  const s26 = keywordSignals(profile.hopeWords);
+function microProfile(profile) {
+  const s25 = keywordSignals(profile?.selfWords ?? []);
+  const s26 = keywordSignals(profile?.hopeWords ?? []);
 
   // --- ZH (Mandarin) ---
-  if(LANG==="zh"){
-    // 1. Stress -> Solution
-    if(s25.burnout && s26.recovery) return "你不是不够努力，是努力太久了。2026 年的关键，是把恢复和休息变成一个计划。";
-    // 2. High effort -> Need for strategy
-    if(s25.ambition && s26.clarity) return "你能力很强，但下一步不是更拼命，而是找到更清晰、更持久的努力方向。";
-    // 3. Connection reinforcement
-    if(s25.connection && s26.connection) return "你想要的不是人多热闹，而是真正的确定感：坦诚、界限，以及被温柔以待。";
-    // 4. Growth reinforcement
-    if(s25.growth && s26.growth) return "你正在认真地升级自己。2026 年适合把学习到的知识，转化成看得到的具体成果。";
-    // 5. Growth -> Action/Results
-    if(s25.growth && s26.ambition) return "去年你积累了知识。现在，是时候把这些学习直接转化为事业和财富上的胜利了。";
-    // 6. Extreme Stress -> Need for Safety
-    if(s25.burnout && s26.stability) return "你需要一块坚实的地基。先别想大变动——2026 年要先保护日常，建立安全感。";
-    // 7. Stable Base -> Launchpad
-    if(s25.stability && s26.adventure) return "地基已打好。你的安全感就是你发射的跑道，可以进行有计划的、快乐的冒险。";
-    // 8. Overwork -> Forced Slowdown
-    if(s25.ambition && s26.recovery) return "你已经收获了许多，但也有损耗。明年是维护期，不是追求最大产出的时候。";
-    // 9. Knowing -> Bold Action
-    if(s25.clarity && s26.adventure) return "你已经知道自己要什么了。现在，2026 年的关键是找到大胆、创新的方法去实现它。";
-    // 10. Social Overload -> Better Boundaries
-    if(s25.connection && s26.clarity) return "你已准备好划清界限。2026 年的目标是拥有更少、但质量更高的关系。";
-    // 11. Wanderlust -> Anchoring
-    if(s25.adventure && s26.stability) return "你完成了探索和爆发。现在的胜利在于把这些新发现融入可持续的生活模式。";
-    // 12. Strategy -> Execute
-    if(s25.clarity && s26.ambition) return "目标已经很清晰。2026 年就是全力信任你的方向，并将动能拉到最大。";
-    // 13. Ambition -> Stability
-    if(s25.ambition && s26.stability) return "现在你需要锁定成果。2026 年重点不在于爬得更高，而是要确保你当前所处的高度是稳固的。";
-    // 14. Connection -> Growth
-    if(s25.connection && s26.growth) return "你的关系网提供了成长的安全空间。利用这份支持去推动自己掌握一项新技能。";
-    // 15. Growth -> Clarity
-    if(s25.growth && s26.clarity) return "你吸收了大量新知识。现在的关键是把它们过滤成一个清晰、可执行的方向。";
-    // 16. Recovery -> Ambition
-    if(s25.recovery && s26.ambition) return "你的能量回来了。2026 年就是要用一个明确的目标，来测试你新恢复系统的力量。";
-    // 17. Burnout -> Adventure
-    if(s25.burnout && s26.adventure) return "逃离是可能的，但必须是有计划的。你的冒险应该优先考虑乐趣，而非目的地或成果。";
-    // 18. Adventure -> Growth
-    if(s25.adventure && s26.growth) return "你收集了独特的经验。现在的胜利在于将这些新奇感转化为持久的个人成长。";
-    // 19. Clarity -> Stability
-    if(s25.clarity && s26.stability) return "你已经有了地图。现在的重点是建立可靠、稳定的日常，让前进变成一种习惯。";
-    // 20. Stability -> Growth
-    if(s25.stability && s26.growth) return "你的安全地基已准备就绪。利用这个可预测的基础，启动深度、聚焦的自我发展。";
+  if (LANG === "zh") {
 
-    // Default/Catch-all
-    return "你正在从“硬撑着过日子”走向“活出真正的自己”，这个转变本身就是最好的兆头。";
+    // Financial Independence logic
+    if (s25.ambition && s26.financialIndependence)
+      return "你已经有拼劲了。2026 别光顾着流汗，要学会‘让钱加班’：把事业积累转化成资产，建立你的财务护城河。";
+
+    if (s25.burnout && s26.financialIndependence)
+      return "你累是因为没得选。2026 重点是攒够‘拒绝的底气’：通过理财和被动收入，一点点把生活的主动权买回来。";
+
+    if (s25.stability && s26.financialIndependence)
+      return "基本盘已经稳了。2026 别只盯着死工资，多研究资产配置，让你的财务结构从‘稳健’升级到‘自由’。";
+
+    // Burnout -> Discipline/Fitness
+    if (s25.burnout && s26.disciplineFitness)
+      return "你不是缺动力，是 CPU 烧了。2026 别再硬扛：先通过睡觉、健身和规律作息把‘底层系统’修好，能量稳了事儿才成。";
+
+    // Ambition/Execution -> Execution
+    if ((s25.ambition || s25.executionMode) && (s26.executionMode || s26.ambition))
+      return "别光想了，2026 是你的‘出货年’。少开会、多干活，盯死目标拿结果，把手里的事儿一件件做实、做透。";
+
+    // Clarity -> Scale/System
+    if (s25.clarity && s26.scaleMode)
+      return "想通了就开始搭模版。2026 别再靠蛮力干活，要靠系统：把那套成功的路子固定下来，让它自己跑起来。";
+
+    // Scale -> Execution
+    if (s25.scaleMode && s26.executionMode)
+      return "系统搭好了，现在得看产出。2026 要像机器一样精准：对齐指标、守住节奏，让你的规模化优势变现。";
+
+    // Family time vs ambition
+    if (s25.ambition && s26.familyTime)
+      return "你想往上冲，但别把家弄丢了。2026 试试‘强制闭关’：先把陪家人的时间锁死，剩下的时间再玩命冲刺。";
+
+    // Family time reinforcement
+    if (s25.familyTime && s26.familyTime)
+      return "日子是过给自己的，不是给别人看的。2026 把‘人在场’当成头等大事：少一点借口，多一点实实在在的陪伴。";
+
+    // Discipline/Fitness -> Execution
+    if (s25.disciplineFitness && s26.executionMode)
+      return "身体这台机器已经调教好了。2026 就看你怎么踩油门：把这份自律带到工作里，保持节奏，疯狂输出。";
+
+    // ===== Standard Rules =====
+    if(s25.burnout && s26.recovery) return "你不是不够努力，是努力太久了。2026 要学会‘心安理得地回血’，休息本身就是一种高效产出。";
+    if(s25.ambition && s26.clarity) return "你很有本事，但现在缺的不是力气，是方向。2026 停掉那些瞎忙活，找准那个‘真命目标’再发力。";
+    if(s25.connection && s26.connection) return "你想要的不是人多热闹，是那种‘懂你’的确定感。2026 守好边界，只跟值得的人深交。";
+    if(s25.growth && s26.growth) return "你一直在升级自己。2026 别只顾着输入，要把学到的本事拿出来‘打怪升级’，见见真章。";
+    if(s25.growth && s26.ambition) return "攒了这么久大招，2026 轮到你上场了。把你学的那些东西直接变现，拿回属于你的胜利。";
+    if(s25.burnout && s26.stability) return "先稳住，别浪。2026 找个避风港歇歇脚，把基本盘守住，安全感比什么都重要。";
+    if(s25.stability && s26.adventure) return "地基已打好。你的安全感就是你发射的跑道，可以进行有计划的、快乐的冒险。";
+    if(s25.ambition && s26.recovery) return "去年冲得太猛了，明年是‘维护保养期’。适当慢下来，别让野心透支了身体。";
+    if(s25.clarity && s26.adventure) return "既然想清楚了，那就玩把大的。2026 试点新鲜花样，用最野的路子去搞定你的目标。";
+    if(s25.connection && s26.clarity) return "别再当烂好人了。2026 要学会给社交圈‘断舍离’，留下几个对的人就够了。";
+    if(s25.adventure && s26.stability) return "野够了也看够了。2026 找个地方降落，把那些新鲜体验转化成实实在在的生活。";
+    if(s25.clarity && s26.ambition) return "目标在那，路在脚下。2026 别再犹豫，拉满动能全速前进，这一波你是主角。";
+    if(s25.ambition && s26.stability) return "爬得够高了，现在得站稳。2026 别急着开新地图，先把手里的地盘守牢、坐实。";
+    if(s25.connection && s26.growth) return "身边的人就是你的底气。利用这份支持去挑战点不敢想的事，有人接住你，别怕。";
+    if(s25.growth && s26.clarity) return "学的越多越容易乱。2026 关键是‘做减法’，从一堆本事里挑出那个最关键的，练成绝活。";
+    if(s25.recovery && s26.ambition) return "血回满了，手感也回来了。2026 搞个大动作，让大家看看满血复活的你有多强。";
+    if(s25.burnout && s26.adventure) return "想逃跑不可耻，但要逃得聪明。2026 的冒险只为了开心，别再背负任何KPI了。";
+    if(s25.adventure && s26.growth) return "外面的世界让你开了眼。2026 把这些见识带回来，把自己打磨成更酷、更通透的人。";
+    if(s25.clarity && s26.stability) return "地图都在脑子里了，现在缺的是步数。2026 踏踏实实过好每一天，让进步变成一种本能。";
+    if(s25.stability && s26.growth) return "最难的阶段已经过去了。趁着现在生活稳定，2026 潜心搞点深度研究，给自己来次彻底升级。";
+
+    return "别担心，你正在从‘硬撑着过日子’变成‘活出真自我’。这个状态的转变，就是 2026 送你最好的礼物。";
   }
 
   // --- EN (English) ---
-  
-  // 1. Stress -> Solution
+
+  // Financial Independence logic
+  if (s25.ambition && s26.financialIndependence)
+    return "You’ve got the drive; now you need the leverage. 2026 is about making your money work as hard as you do—turn your professional momentum into a permanent financial moat.";
+
+  if (s25.burnout && s26.financialIndependence)
+    return "You’re burnt out because your survival depends on the grind. 2026 is about buying back your freedom: prioritize passive income and savings rate to create the power to say 'No'.";
+
+  if (s25.stability && s26.financialIndependence)
+    return "The foundation is solid. 2026 is about moving from 'safe' to 'free.' Focus on asset allocation and wealth-building rather than just maintaining the status quo.";
+
+  // Burnout -> Discipline/Fitness
+  if (s25.burnout && s26.disciplineFitness)
+    return "You’re not weak—you’re overloaded. 2026 is about rebuilding your base with sleep, training, routines, and nutrition.";
+
+  // Ambition/Execution -> Execution
+  if ((s25.ambition || s25.executionMode) && (s26.executionMode || s26.ambition))
+    return "You’re in results mode. 2026 is: ship → review → ship again. Less noise, more finished work.";
+
+  // Clarity -> Scale/System
+  if (s25.clarity && s26.scaleMode)
+    return "The direction is clear—now scale it. 2026 is about systems: SOPs, automation, metrics, and repeatable output.";
+
+  // Scale -> Execution
+  if (s25.scaleMode && s26.executionMode)
+    return "You’re building the machine. 2026 is about turning the machine into output with cadence, metrics, and ownership.";
+
+  // Family time vs ambition
+  if (s25.ambition && s26.familyTime)
+    return "You still want to climb—but not at the cost of your life. 2026 is about boundaries: lock in family time first, then make the remaining work ruthless and high-impact.";
+
+  // Family time reinforcement
+  if (s25.familyTime && s26.familyTime)
+    return "You’re choosing a steadier life. 2026 is about presence: less guilt, more real time with the people who matter.";
+
+  // Discipline/Fitness -> Execution
+  if (s25.disciplineFitness && s26.executionMode)
+    return "You’re building a body-and-routine engine. 2026 is converting that discipline into output: clear targets, steady cadence, visible delivery.";
+
+  // Standard Rules
   if(s25.burnout && s26.recovery) return "You weren’t lazy—you were carrying too much. 2026 is about making recovery a real system.";
-  // 2. High effort -> Need for strategy
   if(s25.ambition && s26.clarity) return "You’re capable. Your next upgrade isn’t more hustle—it’s direction + sustainability.";
-  // 3. Connection reinforcement
   if(s25.connection && s26.connection) return "You don’t want chaos—you want safe connection: honesty, boundaries, and being treated well.";
-  // 4. Growth reinforcement
   if(s25.growth && s26.growth) return "You’re leveling up on purpose. 2026 is about turning learning into visible wins.";
-  // 5. Growth -> Action/Results
   if(s25.growth && s26.ambition) return "You built the knowledge last year. Now, channel that learning directly into career and financial wins.";
-  // 6. Extreme Stress -> Need for Safety
   if(s25.burnout && s26.stability) return "You need firm ground. Forget big changes—2026 is about protecting your routine and building safety first.";
-  // 7. Stable Base -> Launchpad
   if(s25.stability && s26.adventure) return "The groundwork is done. Your security is your launchpad for calculated, joyful risk.";
-  // 8. Overwork -> Forced Slowdown
   if(s25.ambition && s26.recovery) return "You achieved a lot, but at a cost. Next year is about maintenance, not maximum output.";
-  // 9. Knowing -> Bold Action
   if(s25.clarity && s26.adventure) return "You know *what* you want. Now, 2026 is about finding bold, new *ways* to get there.";
-  // 10. Social Overload -> Better Boundaries
   if(s25.connection && s26.clarity) return "You’re ready for better boundaries. The goal is fewer, higher-quality relationships.";
-  // 11. Wanderlust -> Anchoring
   if(s25.adventure && s26.stability) return "You had your big burst of exploration. The win now is weaving those discoveries into a sustainable lifestyle.";
-  // 12. Strategy -> Execute
   if(s25.clarity && s26.ambition) return "You know the target. 2026 is the year to trust your direction and apply maximum momentum.";
-  // 13. Ambition -> Stability
   if(s25.ambition && s26.stability) return "You need to lock in your gains. 2026 is less about the next climb, and more about securing your current height.";
-  // 14. Connection -> Growth
   if(s25.connection && s26.growth) return "Your relationships provide the safe space you need to grow. Use that support system to push into new skills.";
-  // 15. Growth -> Clarity
   if(s25.growth && s26.clarity) return "You’ve gathered many new inputs. Now, the key is filtering that knowledge into one sharp, actionable direction.";
-  // 16. Recovery -> Ambition
   if(s25.recovery && s26.ambition) return "Your energy is back. 2026 is the year to test the strength of your refreshed system with a specific goal.";
-  // 17. Burnout -> Adventure
   if(s25.burnout && s26.adventure) return "Escape is possible, but it must be intentional. Your adventure should prioritize fun over performance or destinations.";
-  // 18. Adventure -> Growth
   if(s25.adventure && s26.growth) return "You've gathered unique experiences. The win now is translating that novelty into sustained personal evolution.";
-  // 19. Clarity -> Stability
   if(s25.clarity && s26.stability) return "You have the map. The focus now is on building the reliable, consistent routine that makes the journey automatic.";
-  // 20. Stability -> Growth
   if(s25.stability && s26.growth) return "Your secure base is ready. Use that predictable foundation as a launchpad for deep, focused personal development.";
 
-  // Default/Catch-all
   return "You’re moving from “getting through it” to “living like yourself,” and that shift matters.";
 }
 
@@ -1488,83 +1629,148 @@ function comboInsight(cards, profile){
   const now  = cardAxis(cards[1]);
   const fut  = cardAxis(cards[2]);
   const g = profile.goal;
-
   const s26 = keywordSignals(profile.hopeWords);
+
   const moves = [];
-  const add = (en, zh)=>moves.push({en, zh});
+  const add = (en, zh) => moves.push({en, zh});
 
-// future-led guidance (most differentiating)
-  if(fut === "alignment"){
-    add(
-      `2026 wants clean alignment: pick fewer things, but pick them on purpose. Filter all decisions through your top goal for ${cap(g)}.`,
-      `2026 更强调“精准对齐”：少做点，但确保每件都带着明确目标。所有决定都要先经过 ${cap(g)} 这个最高目标的筛选。` 
-    );
-  }
-  if(fut === "rhythm"){
-    add(
-      `Your edge is rhythm: build one weekly loop you can keep even on low-energy days. The goal isn't speed, but never stopping.`,
-      `你的优势在于“节奏感”：建立一个哪怕低能量时也能坚持下去的每周循环。目标不是速度，而是永不停止。` 
-    );
-  }
-  if(fut === "renewal"){
-    add(
-      `This is a “rebuild your baseline” year: small wins stacked calmly will beat heroic bursts. Focus on foundational habits (sleep, food, movement) first.`,
-      `这是“养底盘”的一年：平静地积累小胜利，比爆发式地猛冲更有效。优先关注你的基础习惯：睡眠、饮食和运动。`    
-    );
-  }
-  if(fut === "momentum"){
-    add(
-      `Green light year: once you choose a lane, you’ll move fast—protect focus like it’s money. Time saved by saying 'no' is your new currency.`,
-      `这是“开绿灯”的一年：一旦选定跑道就会加速。像保护金钱一样，保护你的专注力。学会拒绝可以帮你省下大量宝贵时间。` 
-    );
-  }
-  if(fut === "release"){
-    add(
-      `A reset is coming: your win is letting the outdated version of you go—fast. Don't let sunk costs keep you tied to things that no longer serve your future.`,
-      `一次蜕变正在到来：你的胜利就是“快速放下那个过时的自己”。别让沉没成本，把你绑在那些不再服务于未来的事物上。` 
-    );
+  const heavyAxes = ["restriction", "release", "reckoning", "shift", "intuition"];
+  const frictionScore = [past, now, fut].filter(axis => heavyAxes.includes(axis)).length;
+  if (frictionScore >= 2) {
+    add("Heads up: This path has high internal friction. If 2026 feels stuck, don't just 'try harder'—change your method. Look for a side door.",
+        "提醒：这组牌的‘内耗值’偏高。如果 2026 觉得卡住了，别只会‘更努力’，那是让你换个法子，试着找个侧门进去。");
   }
 
-  // present-led “right now” move
-  if(now === "clarity"){
-    add(
-      `Right now: clarity beats hustle. Make one decision you’ve been avoiding, then block time immediately to act on it.`,
-      `当下：清晰比瞎忙更重要。去搞定一个你一直在拖延的决定，然后马上为这个行动预留时间。`
-    );
+  // --- FUTURE/CARD-SPECIFIC GUIDANCE (Using your if format) ---
+  if(fut === "alignment") {
+    add("2026 wants clean alignment: filter every decision through your main quest. If it's not a 'Hell Yes,' it's a 'No'.", 
+        "2026 强调‘精准对齐’：所有决定都要经过主线目标的筛选。如果不是‘非它不可’，那就干脆别做。");
   }
-  if(now === "agency"){
-    add(
-      `You already have tools. Stop waiting for permission and ship one concrete step. That single launch will create the momentum you need.`,
-      `资源其实都准备好了。别再等许可了，先去推进一个具体的行动。就是这“一次启动”会为你创造需要的动力。` 
-    );
+  if(fut === "rhythm") {
+    add("Your edge is rhythm: build a weekly loop you can keep even on low-energy days. The goal is a pace you can sustain forever.", 
+        "你的优势在于‘节奏感’：建立一个哪怕能量低时也能跑通的每周循环。目标是找到能永远跑下去的节奏。");
   }
-  if(now === "nurture" || now === "renewal"){
-    add(
-      `Make care practical: sleep/food/movement as defaults, not “if I have time.” Treat your physical health as the foundation for all ambition.`,
-      `把照顾自己落到实处：睡眠、饮食、运动是必选项，不是“有空再说”。把身体健康看作所有野心的基础。` 
-    );
+  if(fut === "momentum") {
+    add("2026 is a green-light year. Once you choose a lane, go full throttle. Protect your focus like it’s your most valuable currency.", 
+        "2026 是‘全速前进’的一年。一旦选好赛道就别再犹豫。像保护金钱一样，保护你的专注力。");
+  }
+  if(fut === "release" || fut === "shift") {
+    add("A perspective shift is coming: your win is letting the outdated version of you go. Don't let sunk costs tie you to the past.", 
+        "一次视角蜕变即将到来：你的胜利就是‘快速放下那个过时的自己’。别让沉没成本把你绑在过去。");
+  }
+  if(fut === "completion") {
+    add("2026 is your 'victory lap.' Finish the old loops before starting new ones. The power is in the follow-through, not the launch.", 
+        "2026 是你的‘庆功轮’。在开新坑之前，先把旧任务彻底结项。真正的力量来自于完成，而不是开始。");
+  }
+  if(fut === "start") {
+    add("The biggest risk in 2026 is playing it too safe. Take the leap—one bold start will teach you more than ten years of planning.", 
+        "2026 最大的风险是‘太稳了’。大胆跳出去吧，一次勇敢的启动能让你学到计划十年都学不到的东西。");
+  }
+  if(fut === "reckoning") {
+    add("A major calling is coming. 2026 isn't for 'maybe'—it's for making the big, final decision you’ve been preparing for.", 
+        "一个重大的召唤即将出现。2026 不适合‘试试看’，而适合去做那个你准备已久的终极决定。");
+  }
+  if(fut === "intuition") {
+    add("Trust your gut 'vibe' on people and projects in 2026. Your intuition is picking up on data your logical brain missed.", 
+        "2026 多听听直觉的‘感应’。在选人和选项目时，你的潜意识比大脑反应更精准。");
   }
 
-  // keyword-tuned finishing
-  if(s26.recovery){
-    add(
-      `Treat recovery like a system: schedule it, track it, and don’t negotiate with it. True rest is productive.`,
-      `把“恢复”当成一个系统来运行：排进日程、追踪进度，别跟它妥协。真正的休息，本身就是一种高效的产出。` 
-    );
-  } else if(s26.clarity){
-    add(
-      `Your power move is simplification: fewer goals, cleaner inputs, faster feedback. Eliminate one recurring task that doesn't serve your highest purpose.`,
-      `你的王牌是“做减法”：目标更少，输入更干净，反馈回路更快。删掉一个不再服务于你最高目标、又重复出现的任务。` 
-    );
-  } else {
-    add(
-      `Consistency will do the heavy lifting: tiny daily effort beats occasional intensity. Find the minimum viable effort you can sustain, and stick to it daily.`,
-      `“稳定”会替你扛大部分压力：每天一点点，比偶尔爆发更有用。找到你能持续的“最低可行努力量”，然后每天坚持。` 
-    );
+  // --- PRESENT/ACTION-LED GUIDANCE ---
+  if(now === "clarity") {
+    add("Right now: Clarity beats hustle. Make one decision you’ve been avoiding, then block time immediately to act on it.", 
+        "当下：清晰比瞎忙更重要。去搞定一个你一直在拖延的决定，然后马上为它预留行动时间。");
   }
-  return moves.slice(0,3);
+  if(now === "agency") {
+    add("You already have the tools. Stop waiting for permission and ship one concrete step. That single launch creates the momentum.", 
+        "资源其实都够了。别再等‘批准’了，先去推进一个具体的行动。就是这‘第一次启动’会创造动力。");
+  }
+  if(now === "nurture" || now === "renewal") {
+    add("Make care practical: sleep and movement are defaults, not 'if I have time.' Treat health as the foundation for your ambition.", 
+        "把照顾自己落到实处：睡眠和运动是必选项。把身体健康看作你所有野心的底层系统。");
+  }
+  if(now === "restriction") {
+    add("Right now: Break the loop. Identify the one habit or attachment holding you back and cut it. You can't run fast with dead weight.", 
+        "当下：打破循环。找出一个把你拖入内耗的旧习惯或依赖，直接切断。背着包袱跑不快。");
+  }
+  if(now === "flex") {
+    add("Right now: Stop resisting the change. The situation is shifting, so be water. Adaptability is more powerful than a rigid plan.", 
+        "当下：别再抗拒变化。局势在变，你也要变。保持灵活，‘顺势而为’比死板的计划更有杀伤力。");
+  }
+  if(now === "reflection") {
+    add("Right now: Go dark. Step back from the noise and find your own truth. The answer isn't on the internet; it's in your quietest thoughts.", 
+        "当下：屏蔽噪音。从闹市里退出来，找回自己的想法。你要的答案不在网上，而在安静的思考里。");
+  }
+  if(now === "courage") {
+    add("Right now: Soft power is key. Handle the challenge with quiet confidence. You don't need to shout to be heard.", 
+        "当下：以柔克刚。你不需要大声证明自己。保持稳健，用这种‘安静的自信’去解决困难。");
+  }
+  if(now === "values") {
+    add("Right now: Choose your 'tribe' carefully. Alignment in values is more important than skills. Work with people who share your heart.", 
+        "当下：选对队友。三观一致比能力互补更重要。只和那些和你心气儿相通的人一起共事。");
+  }
+
+  // --- TIER 3: RANDOMIZED DEFAULT POOL (Prevents Repetition) ---
+  const defaultPool = [
+    { en: "Iterate faster: 2026 isn't about getting it right the first time, it's about failing cheap and learning fast.", zh: "小步快跑：2026 不求一次做对，但求试错成本低、复盘反馈快。" },
+    { en: "Your power move is 'No.' Every distraction you cut creates space for your real destiny to grow.", zh: "学会说‘不’是你的杀手锏。你剪掉的每一个干扰项，都是在为你的‘真命天子’腾地方。" },
+    { en: "Consistency beats intensity: A 15-minute daily habit will out-run a monthly 10-hour burst every time.", zh: "稳定输出胜过瞬间爆发：每天 15 分钟的坚持，能把每月一次的大招甩开好几条街。" },
+    { en: "Curiosity over judgment: When you hit a wall, don't ask 'Why me?' Ask 'What's the workaround?'", zh: "好奇胜过评判：撞墙时别问‘为什么是我’，多问问‘还有哪条路能绕过去’。" },
+    { en: "Treat recovery like a system: Schedule it like a high-stakes meeting. You can't lead on an empty tank.", zh: "把回血当系统工程：像排重要会议一样排休息时间。油箱空了，你怎么当主角？" },
+    { en: "Show your work: The more people know what you are building, the more 'lucky' coincidences will find you.", zh: "扩大好运接触面：晒出你的成果。越多的人知道你在做什么，‘好运’撞见你的几率就越大。" }
+  ];
+
+  // Logic: Shuffle and fill the moves array to exactly 3 items
+  const shuffled = defaultPool.sort(() => Math.random() - 0.5);
+  for (let item of shuffled) {
+    if (moves.length >= 3) break;
+    // Avoid adding a duplicate if it was already manually added above
+    if (!moves.some(m => m.zh === item.zh)) {
+      add(item.en, item.zh);
+    }
+  }
+
+  return moves.slice(0, 3);
 }
 
+function goalLens(goal){
+  const map = {
+    career: {
+      en: "Prioritize leverage: visible impact, strong stakeholders, and a clear next role",
+      zh: "事业主线：优先做能放大影响力的事，让成果可见、路径清晰"
+    },
+    love: {
+      en: "Choose emotional safety and honesty; build connection through consistent action",
+      zh: "爱情主线：重视安全感与真诚，用持续行动建立信任"
+    },
+    family: {
+      en: "Protect your time and presence; invest in stability, care, and shared rituals",
+      zh: "家庭主线：把“人在场”当优先级，经营稳定与照顾"
+    },
+    health: {
+      en: "Treat energy as the system: sleep, movement, and stress regulation first",
+      zh: "健康主线：先修底层系统——睡眠、运动、减压与恢复"
+    },
+    money: {
+      en: "Increase control: savings rate, downside protection, and skill-to-income conversion",
+      zh: "金钱主线：提升掌控感——储蓄率、防风险、技能变现"
+    },
+    "self-growth": {
+      en: "Pick one deep upgrade: a skill, a mindset shift, or a boundary you will keep",
+      zh: "成长主线：专注一个深度升级：技能/认知/边界，做透就赢"
+    },
+    creativity: {
+      en: "Create consistently: smaller output, higher cadence, and less self-censorship",
+      zh: "创作主线：高频小作品输出，少自我审查，先做出来"
+    },
+    adventure: {
+      en: "Say yes to novelty with guardrails: plan risk, protect budget and recovery",
+      zh: "冒险主线：在护栏内去探索——控风险、控预算、控恢复"
+    }
+  };
+
+  const item = map[goal] || map.career;
+  return (LANG === "zh") ? item.zh : item.en;
+}
 
 function getQuote(cardNameEN, goal, lang) {
     const g = goal.toLowerCase();
@@ -1945,8 +2151,8 @@ function buildReading(profile, cards){
     const oneLinerEN = `Your Guidance (Card of 2026: ${futureCardNameEN}): ${personalizedQuote}`;
     const oneLinerZH = `26 年指引（关键牌：${futureCardNameZH}）：${personalizedQuote}`;
 
-    const goalLineEN = `Main quest lens: ${goalLens(profile.goal)}.`;
-    const goalLineZH = `主线视角：${goalLens(profile.goal)}。`;
+    const goalLineEN = `${goalLens(profile.goal)}.`;
+    const goalLineZH = `${goalLens(profile.goal)}。`;
 
     return {
         idLineEN, idLineZH,
@@ -2336,7 +2542,7 @@ function doReset(){
   nameInput.value = "";
   ageInput.value = "";
   mbtiInput.value = "";
-  zodiacSelect.value = "none";
+  zodiacSelect.value = "";
   selfInput.value = "";   // Clears the "I feel..." keywords
   hopeInput.value = "";   // Clears the "I hope for..." keywords
   goalSelect.value = "career"; // Resets the 2026 goal selection
@@ -2351,10 +2557,12 @@ function doReset(){
 function doSurprise(){
   const samples = [
     {name:"Mina", age:"22", mbti:"", zodiac:"leo", self:"curious, social, restless", hope:"love, calm, trust", goal:"love"},
-    {name:"Jay", age:"30", mbti:"ENTP", zodiac:"virgo", self:"busy, ambitious, stressed", hope:"money, stability, focus", goal:"money"},
-    {name:"Sofia", age:"19", mbti:"ISFJ", zodiac:"cancer", self:"nurturing, overworked, seeking balance", hope:"rhythm, peace, boundaries", goal:"health"},
+    {name:"Jay", age:"30", mbti:"INTP", zodiac:"virgo", self:"busy, ambitious, stressed", hope:"money, stability, focus", goal:"money"},
     {name:"Ethan", age:"32", mbti:"INFJ", zodiac:"scorpio", self:"reflective, seeking purpose, ready for change", hope:"clarity, transformation, wisdom", goal:"self-growth"},
-    {name:"Chloe", age:"29", mbti:"ESTP", zodiac:"sagittarius", self:"adventurous, impulsive, needs structure", hope:"focus, discipline, momentum", goal:"ambition"},
+    {name:"Chloe", age:"29", mbti:"ESTP", zodiac:"sagittarius", self:"adventurous, impulsive, needs structure", hope:"focus, discipline, momentum", goal:"adventure"},
+    {name:"李雷", age:"21", mbti:"ENFP", zodiac:"gemini", self:"搞钱, 拼命, 卷, 业绩压力", hope:"财务自由, 被动收入, 资产配置, 稳健", goal:"money"},
+    {name:"韩梅梅", age:"24", mbti:"ISTJ", zodiac:"libra", self:"内耗, 迷茫, 心累, emo", hope:"回血, 松弛感, 疗愈", goal:"career"},
+    {name:"老王", age:"35", mbti:"ENTJ", zodiac:"libra", self:"执行力, 瓶颈, 忙碌", hope:"规模化, 杠杆, 闭环, 结果", goal:"health"},
   ];
   const s = pickFrom(samples);
   nameInput.value = s.name;
